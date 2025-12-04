@@ -18,16 +18,8 @@ public class Vehicules extends Stockables {
         return this.vitesse;
     }
 
-    public String getNom(){
-        return this.nom;
-    }
-
     public void setVitesse(float vitesse){
         this.vitesse = vitesse;
-    }
-
-    public void setNom(String nom){
-        this.nom = nom;
     }
 
     public TYPE getType(){

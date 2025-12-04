@@ -2,21 +2,14 @@ package com.main;
 
 enum Couleur{ BLEU, ROUGE, VERT}
 
-enum Vehicules {
-    
-}
 
 public class Capsule extends Stockables{
-    private float prix;
+    
     private Couleur couleur;
 
     public Capsule(float prix, Couleur couleur, String nom) {
         super(nom, prix);
         this.couleur = couleur;
-    }
-
-    public float getPrix() {
-        return prix;
     }
 
     public Couleur getCouleur() {

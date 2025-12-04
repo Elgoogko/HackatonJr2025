@@ -3,6 +3,7 @@ package com.main;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import com.main.*;
 
 enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}
 
@@ -14,10 +15,18 @@ public class Boutique {
 
     public Boutique() {
         this.stock = new ArrayList<>();
-        this.stock.add(new Capsule(10000, Couleur.BLEU, null));
-        this.stock.add(new Capsule(10000, Couleur.ROUGE, null));
-        this.stock.add(new Capsule(10000, Couleur.VERT, null));
+        this.stock.add(new Capsule(10000.0f, Couleur.BLEU, "Capsule bleu"));
+        this.stock.add(new Capsule(10000.0f, Couleur.ROUGE, "Capsule rouge"));
+        this.stock.add(new Capsule(10000.0f, Couleur.VERT, "Capsule vert"));
+        Catalogue catalogue = new Catalogue();
+        this.stock.addAll(catalogue.Vetements);
+        this.stock.addAll(catalogue.Nourritures);
+        this.stock.addAll(catalogue.Vehicules);
         return;
+    }
+
+    public ArrayList<Stockables> getStock() {
+        return this.stock;
     }
 
     public Stockables acheter(Stockables sto) {
