@@ -1,7 +1,7 @@
 public class Catalogue {
-    public Static ArrayList<Vetement> Vetements = new ArrayList<>();
-    public Static ArrayList<Nourriture> Nourritures = new ArrayList<>();
-    Public Catalogue() {
+    public static ArrayList<Vetement> Vetements = new ArrayList<>();
+    public static ArrayList<Nourriture> Nourritures = new ArrayList<>();
+    public Catalogue() {
         Vetement.add(new Vetement("Chapeau de Chaozu", 200.0f, 5.0f, TYPE_VETEMENT.Tete));
         Vetement.add(new Vetement("Echarpe", 100.0f, 3.0f, TYPE_VETEMENT.Tete));
         Vetement.add(new Vetement("Turban de Piccolo", 400.0f, 7.0f, TYPE_VETEMENT.Tete));
