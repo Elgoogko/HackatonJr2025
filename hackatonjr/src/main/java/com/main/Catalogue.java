@@ -1,5 +1,7 @@
 package com.main;
 import java.util.ArrayList;
+import java.util.random.RandomGenerator;
+
 import com.main.*;
 public class Catalogue {
     public static ArrayList<Vetement> Vetements = new ArrayList<>();
@@ -15,6 +17,9 @@ public class Catalogue {
         Vetements.add(new Vetement(6.0f, TYPE_VETEMENT.Bas, "Bas de Vegeta", 400.0f));
         Vetements.add(new Vetement(7.0f, TYPE_VETEMENT.Bas, "Bas de Piccolo", 500.0f));
 
-        
+        Nourritures.add(new Nourriture(100, "Senzu", 1000.0f));
+        Nourritures.add(new Nourriture(35, "Gibier", 300.0f));
+        Nourritures.add(new Nourriture(45, "Ramen", 500.0f));
+        Nourritures.add(new Nourriture(25, "Burger", 100.0f));
     }
 }
