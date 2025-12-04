@@ -4,16 +4,17 @@ import java.util.ArrayList;
 
 import com.main.Stockables;
 
+import com.main.Nourriture;
 
 public class Utilisateur {
     private String nom;
     private float argent;
-    private float pv;
+    private int pv;
     private ArrayList<Stockables> inventaire;
     private float faim;
     private float temperature;
 
-    public Utilisateur(String nom, float argent, float pv, ArrayList<Stockables> inventaire, float faim, float temperature){
+    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, float faim, float temperature){
         this.nom = nom;
         this.argent = argent;
         this.pv = pv;
@@ -28,7 +29,7 @@ public class Utilisateur {
     public float getArgent(){
         return this.argent;
     }
-    public float getPV(){
+    public int getPV(){
         return this.pv;
     }
     public ArrayList<Stockables> getInventaire(){
@@ -48,7 +49,7 @@ public class Utilisateur {
     public void setArgent(float argent){
         this.argent = argent;
     }
-    public void setPV(float pv){
+    public void setPV(int pv){
         this.pv = pv;
     }
     public void setInventaire(ArrayList<Stockables> inventaire){
@@ -65,7 +66,7 @@ public class Utilisateur {
         if(prix > this.argent){
             return 0;
         }
-        this.argent = this.argent - prix;
+        this.argent -= prix;
         return 1;
     }
 
@@ -75,5 +76,23 @@ public class Utilisateur {
 
     public void ajoutTousElements(ArrayList<Stockables> stockables){
         this.inventaire.addAll(stockables);
+    }
+
+    public void reduirePV(int pv){
+        this.pv -= pv;
+        if(this.pv < 0){
+            this.pv = 0;
+        }
+    }
+
+    public void ajouterPV(int pv){
+        this.pv += pv;
+        if(this.pv > 100){
+            this.pv = 100;
+        }
+    }
+
+    public void manger(Nourriture nourriture){
+        ajouterPV(nourriture.getRenduFaim());
     }
 }
