@@ -48,8 +48,9 @@ public class Carte {
             }
 
             for (Chemin chemin : courant.getChemins()) { // pour chaque chemin adjacent au lieu courant
-            
-                boolean transportOk = modeTransport == chemin.getModeTransportOk() || chemin.getModeTransportOk() == ModeTransport.TOUS;
+
+                boolean transportOk = modeTransport == chemin.getModeTransportOk()
+                        || chemin.getModeTransportOk() == ModeTransport.TOUS;
                 Lieu voisin = chemin.getAutre(courant); // donne le lieu auquel mène le chemin
                 float nouvelleDist = distances.getOrDefault(courant, Float.MAX_VALUE)
                         + chemin.getDistance(); // dist = distance pour aller au courant (ou l'infini par defaut si
@@ -80,5 +81,26 @@ public class Carte {
         }
 
         return cheminFinal;
+    }
+
+    public ArrayList<Lieu> init_liste_lieux() {
+        ArrayList<Lieu> lieux = new ArrayList<Lieu>();
+        lieux.add(new Lieu(0, "Village du grand chef", 25, "C'est un village. Il est dirigé par un très grand chef.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(50, 1000)));
+        lieux.add(new Lieu(1, "Canyon central", 30, "Un canyon immense avec des parois abruptes.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(150, 850)));
+        lieux.add(new Lieu(2, "Vaisseau de Freezer", 5, "Le vaisseau spatial de Freezer est posé ici.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(75, 600)));
+        lieux.add(new Lieu(3, "Village de Moori", 28, "Un village paisible habité par des Nameks.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(400, 500)));
+        lieux.add(new Lieu(4, "Maison de Guru", 15, "Maison du grand Namek Guru.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(600, 600)));
+        lieux.add(new Lieu(5, "Vieux temple", 22, "Un temple ancien et mystérieux.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(550, 50)));
+        lieux.add(new Lieu(6, "Fret de Namek", 27, "Un grand fret rempli de marchandises.", null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(50, 50)));
+        
+                
+        return lieux;
     }
 }

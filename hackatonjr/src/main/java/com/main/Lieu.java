@@ -63,7 +63,6 @@ public class Lieu {
         this.chemins = chemins;
     }
 
-    public ArrayList<Lieu> 
 
     @Override
     public String toString() {
