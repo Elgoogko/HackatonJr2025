@@ -2,9 +2,7 @@ package com.main;
 
 import java.util.ArrayList;
 
-import com.main.Stockables;
-
-import com.main.Nourriture;
+import com.main.*;
 
 public class Utilisateur {
     private String nom;
@@ -13,14 +11,16 @@ public class Utilisateur {
     private ArrayList<Stockables> inventaire;
     private int faim;
     private int temperature;
+    private Tenue tenue;
 
-    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature){
+    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature, Tenue tenue){
         this.nom = nom;
         this.argent = argent;
         this.pv = pv;
         this.inventaire = inventaire;
         this.faim = faim;
         this.temperature = temperature;
+        this.tenue = tenue;
     }
 
     public String getNom(){
@@ -41,6 +41,9 @@ public class Utilisateur {
     public float getTemperature(){
         return this.temperature;
     }
+    public Tenue getTenue(){
+        return this.tenue;
+    }
 
 
     public void setNom(String nom){
@@ -60,6 +63,11 @@ public class Utilisateur {
     }
     public void setTemperature(int temperature){
         this.temperature = temperature;
+    }
+    public void setTenue(Tenue tenue){
+        this.tenue.setHaut(tenue.getHaut());
+        this.tenue.setBas(tenue.getBas());
+        this.tenue.setTete(tenue.getTete());
     }
 
     public int retirerArgent(float prix){
@@ -117,5 +125,38 @@ public class Utilisateur {
     public void manger(Nourriture nourriture){
         ajouterFaim(nourriture.getRenduFaim());
         this.inventaire.remove(nourriture);
+    }
+
+    public int equiperVetement(Vetement vetement){
+        if(vetement.getType() == TYPE_VETEMENT.Tete){
+            if(this.tenue.getTete().equals(vetement)){
+                return 0;
+            }
+            else{
+                this.tenue.setTete(vetement);
+                return 1;
+            }
+        }
+        else if(vetement.getType() == TYPE_VETEMENT.Haut){
+            if(this.tenue.getHaut().equals(vetement)){
+                return 0;
+            }
+            else{
+                this.tenue.setHaut(vetement);
+                return 1;
+            }
+        }
+        else if(vetement.getType() == TYPE_VETEMENT.Bas){
+            if(this.tenue.getBas().equals(vetement)){
+                return 0;
+            }
+            else{
+                this.tenue.setBas(vetement);
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
     }
 }
