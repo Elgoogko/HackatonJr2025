@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.main.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}
 
 public class Boutique {
     private ArrayList<Stockables> stock;
+    private ArrayList<Stockables> allstock;
     private ArrayList<Stockables> panier;
     @Autowired
     private Utilisateur utilisateur;
@@ -22,6 +27,7 @@ public class Boutique {
         this.stock.addAll(catalogue.Vetements);
         this.stock.addAll(catalogue.Nourritures);
         this.stock.addAll(catalogue.Vehicules);
+        this.allstock.addAll(this.stock);
         return;
     }
 
@@ -29,19 +35,46 @@ public class Boutique {
         return this.stock;
     }
 
-    public Stockables acheter(Stockables sto) {
+    public boolean acheter(Stockables sto) {
         float prix = sto.getPrix();
         if (sto.getPrix() > utilisateur.getArgent()){
-            return null;
+            return false;
         }
-        utilisateur.retirerArgent(prix);
+        if(utilisateur.retirerArgent(prix) == false){
+            return false;
+        }
         
-        this.stock.remove(sto);
         if (sto instanceof Capsule) {
-            Capsule c = (Capsule) sto;            
-            return c;
+            ArrayList<Stockables> arrayCouleur = new ArrayList<>();
+
+            if(((Capsule)sto).getCouleur() == Couleur.BLEU){
+                for(Stockables s : this.allstock){
+                    if(s instanceof Vetement){
+                        arrayCouleur.add(s);
+                    }
+                }
+            }
+            else if(((Capsule)sto).getCouleur() == Couleur.ROUGE){
+                for(Stockables s : this.allstock){
+                    if(s instanceof Vehicules){
+                        arrayCouleur.add(s);
+                    }
+                }
+            }
+            else{
+                for(Stockables s : this.allstock){
+                    if(s instanceof Nourriture){
+                        arrayCouleur.add(s);
+                    }
+                }
+            }
+            utilisateur.ajoutElement(arrayCouleur.get(ThreadLocalRandom.current().nextInt(arrayCouleur.size())));
         }
-        return sto;
+        else{
+            utilisateur.ajoutElement(sto);
+            this.stock.remove(sto);
+        }
+        return true;
     }
 
     public ArrayList<Stockables> acheterPanier() {
