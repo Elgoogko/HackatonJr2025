@@ -1,7 +1,9 @@
-public class stockables {
+package com.main;
+
+public class Stockables {
     private String nom;
     private float prix;
-    public stockables(String nom, float prix) {
+    public Stockables(String nom, float prix) {
         this.nom = nom;
         this.prix = prix;
     }
