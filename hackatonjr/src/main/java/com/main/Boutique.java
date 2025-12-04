@@ -21,8 +21,8 @@ public class Boutique {
     }
 
     public Stockables acheter(Stockables sto) {
-        float prix = sto.Getprix();
-        if (sto.Getprix() > utilisateur.getArgent()){
+        float prix = sto.getPrix();
+        if (sto.getPrix() > utilisateur.getArgent()){
             return null;
         }
         utilisateur.retirerArgent(prix);
@@ -56,7 +56,7 @@ public class Boutique {
     public float getPrixPanier() {
         float prix = 0;
         for (Stockables elem : stock) {
-            prix += elem.Getprix();
+            prix += elem.getPrix();
         }
         return prix;
     }
@@ -72,16 +72,16 @@ public class Boutique {
                 
                 switch (mode) {
                     case PRIX_CROISSANT:
-                        swap = current.Getprix() > next.Getprix();
+                        swap = current.getPrix() > next.getPrix();
                         break;
                     case PRIX_DECROISSANT:
-                        swap = current.Getprix() < next.Getprix();
+                        swap = current.getPrix() < next.getPrix();
                         break;
                     case NOM_CROISSANT:
-                        swap = current.Getnom().compareTo(next.Getnom()) > 0;
+                        swap = current.getNom().compareTo(next.getNom()) > 0;
                         break;
                     case NOM_DECROISSANT:
-                        swap = current.Getnom().compareTo(next.Getnom()) < 0;
+                        swap = current.getNom().compareTo(next.getNom()) < 0;
                         break;
                 }
                 
@@ -98,11 +98,11 @@ public class Boutique {
         StringBuilder sb = new StringBuilder();
         sb.append("Stock de la boutique:\n");
         for (Stockables elem : stock) {
-            sb.append("- ").append(elem.Getnom()).append(" : ").append(elem.Getprix()).append(" euros\n");
+            sb.append("- ").append(elem.getNom()).append(" : ").append(elem.getPrix()).append(" euros\n");
         }
         sb.append("Panier:\n");
         for (Stockables elem : panier) {
-            sb.append("- ").append(elem.Getnom()).append(" : ").append(elem.Getprix()).append(" euros\n");
+            sb.append("- ").append(elem.getNom()).append(" : ").append(elem.getPrix()).append(" euros\n");
         }
         return sb.toString();
     }

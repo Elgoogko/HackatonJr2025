@@ -3,14 +3,14 @@ package com.main;
 import com.main.Stockables;
 
 public class Nourriture extends Stockables {
-    private float RenduFaim;
+    private int RenduFaim;
 
-    public Nourriture(float RenduFaim, String nom, float prix){
+    public Nourriture(int RenduFaim, String nom, float prix){
         super(nom, prix);
         this.RenduFaim = RenduFaim;
     }
     
-    public float getRenduFaim(){
+    public int getRenduFaim(){
         return this.RenduFaim;
     }
 }

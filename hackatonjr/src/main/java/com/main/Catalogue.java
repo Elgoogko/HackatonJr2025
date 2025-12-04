@@ -1,6 +1,7 @@
 package com.main;
 import java.util.ArrayList;
 import com.main.*;
+import com.main.Nourriture;
 public class Catalogue {
     public static ArrayList<Vetement> Vetements = new ArrayList<>();
     public static ArrayList<Nourriture> Nourritures = new ArrayList<>();
