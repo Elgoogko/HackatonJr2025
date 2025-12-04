@@ -24,7 +24,7 @@ public class Carte {
         return chemins;
     }
 
-    public ArrayList<Chemin> plusCourtChemin(Lieu depart, Lieu arrivee) {
+    public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee) {
         // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
 
         // tab avec distance minimale entre chaque lieu et le départ
@@ -51,12 +51,15 @@ public class Carte {
                 Lieu voisin = chemin.getAutre(courant); // donne le lieu auquel mène le chemin
 
                 float nouvelleDist = distances.getOrDefault(courant, Float.MAX_VALUE)
-                        + chemin.getDistance(); //
+                        + chemin.getDistance(); // dist = distance pour aller au courant (ou l'infini par defaut si
+                                                // vide) + distance du chemin
 
                 if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE)) {
+                    // si cette nouvelle distance est plus courte que celle deja connue (tjr vrai si
+                    // pas encore visitée)
                     distances.put(voisin, nouvelleDist);
                     precedent.put(voisin, courant);
-                    file.add(voisin);
+                    file.add(voisin); // ajoute le voisin à la file pour exploration future
                 }
             }
         }
@@ -66,11 +69,11 @@ public class Carte {
         Lieu actuel = arrivee;
 
         while (actuel != null) {
-            cheminFinal.add(0, actuel);
-            actuel = precedent.get(actuel);
+            cheminFinal.add(0, actuel); // insert au début de la liste
+            actuel = precedent.get(actuel); // remonte au lieu précédent (rappel : ils sont indexés par le lieu actuel)
         }
 
-        // Si le premier lieu n'est pas le départ → aucun chemin trouvé
+        // Si le premier lieu n'est pas le départ --> aucun chemin trouvé
         if (cheminFinal.isEmpty() || !cheminFinal.get(0).equals(depart)) {
             return new ArrayList<>();
         }

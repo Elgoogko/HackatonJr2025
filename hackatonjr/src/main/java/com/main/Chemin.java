@@ -5,10 +5,10 @@ public class Chemin {
     private Lieu lieuA;
     private Lieu lieuB;
 
-    public Chemin(float distance, Lieu lieuA, Lieu lieuB) {
-        this.distance = distance;
+    public Chemin(Lieu lieuA, Lieu lieuB, float distance) {
         this.lieuA = lieuA;
         this.lieuB = lieuB;
+        this.distance = distance;
     }
 
     public float getDistance() {
