@@ -2,7 +2,7 @@ package com.main;
 
 import com.main.Stockables;
 
-enum TYPE{Voiture,Pilier,Nuage};
+enum TYPE{Voiture,Pilier,Nuage, Pieds};
 
 public class Vehicules extends Stockables {
     private float vitesse;

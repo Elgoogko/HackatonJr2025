@@ -46,6 +46,9 @@ public class Utilisateur {
     public Tenue getTenue(){
         return this.tenue;
     }
+    public Vehicules getVehicules(){
+        return this.vehicule;
+    }
 
     public void setNom(String nom){
         this.nom = nom;
@@ -69,6 +72,12 @@ public class Utilisateur {
         this.tenue.setHaut(tenue.getHaut());
         this.tenue.setBas(tenue.getBas());
         this.tenue.setTete(tenue.getTete());
+    }
+    public void setVehicule(Vehicules vehicule){
+        this.vehicule.setNom(vehicule.getNom());
+        this.vehicule.setPrix(vehicule.getPrix());
+        this.vehicule.setVitesse(vehicule.getVitesse());
+        this.vehicule.setType(vehicule.getType());
     }
 
     public int retirerArgent(float prix){
