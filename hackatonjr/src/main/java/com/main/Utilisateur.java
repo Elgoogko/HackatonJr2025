@@ -13,6 +13,15 @@ public class Utilisateur {
     private float faim;
     private float temperature;
 
+    public Utilisateur(String nom, float argent, float pv, ArrayList<Stockables> inventaire, float faim, float temperature){
+        this.nom = nom;
+        this.argent = argent;
+        this.pv = pv;
+        this.inventaire = inventaire;
+        this.faim = faim;
+        this.temperature = temperature;
+    }
+
     public String getNom(){
         return this.nom;
     }
@@ -50,5 +59,21 @@ public class Utilisateur {
     }
     public void setTemperature(float temperature){
         this.temperature = temperature;
+    }
+
+    public int retirerArgent(float prix){
+        if(prix > this.argent){
+            return 0;
+        }
+        this.argent = this.argent - prix;
+        return 1;
+    }
+
+    public void ajoutElement(Stockables stockables){
+        this.inventaire.add(stockables);
+    }
+
+    public void ajoutTousElements(ArrayList<Stockables> stockables){
+        this.inventaire.addAll(stockables);
     }
 }
