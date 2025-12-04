@@ -1,7 +1,5 @@
 package com.main;
 
-import com.main.Stockables;
-
 enum Couleur{ BLEU, ROUGE, VERT}
 
 enum Vehicules {
