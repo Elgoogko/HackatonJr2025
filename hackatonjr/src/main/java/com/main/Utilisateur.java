@@ -12,8 +12,9 @@ public class Utilisateur {
     private int faim;
     private int temperature;
     private Tenue tenue;
+    private Vehicules vehicule;
 
-    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature, Tenue tenue){
+    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature, Tenue tenue, Vehicules vehicule){
         this.nom = nom;
         this.argent = argent;
         this.pv = pv;
@@ -21,6 +22,7 @@ public class Utilisateur {
         this.faim = faim;
         this.temperature = temperature;
         this.tenue = tenue;
+        this.vehicule = vehicule;
     }
 
     public String getNom(){
@@ -44,7 +46,6 @@ public class Utilisateur {
     public Tenue getTenue(){
         return this.tenue;
     }
-
 
     public void setNom(String nom){
         this.nom = nom;
