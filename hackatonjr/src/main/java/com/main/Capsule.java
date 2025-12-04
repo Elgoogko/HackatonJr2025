@@ -4,6 +4,10 @@ import com.main.Stockables;
 
 enum Couleur{ BLEU, ROUGE, VERT}
 
+enum Vehicules {
+    
+}
+
 public class Capsule extends Stockables{
     private float prix;
     private Couleur couleur;
@@ -31,6 +35,7 @@ public class Capsule extends Stockables{
             case VERT:
                 break;
             default:
+                //pas cool 
                 break;
         }
         return null;
