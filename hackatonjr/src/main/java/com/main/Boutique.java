@@ -94,5 +94,17 @@ public class Boutique {
         }
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Stock de la boutique:\n");
+        for (Stockables elem : stock) {
+            sb.append("- ").append(elem.Getnom()).append(" : ").append(elem.Getprix()).append(" euros\n");
+        }
+        sb.append("Panier:\n");
+        for (Stockables elem : panier) {
+            sb.append("- ").append(elem.Getnom()).append(" : ").append(elem.Getprix()).append(" euros\n");
+        }
+        return sb.toString();
+    }
 }
