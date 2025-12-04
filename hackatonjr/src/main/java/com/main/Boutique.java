@@ -3,10 +3,7 @@ package com.main;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.main.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}
@@ -23,10 +20,9 @@ public class Boutique {
         this.stock.add(new Capsule(10000.0f, Couleur.BLEU, "Capsule bleu"));
         this.stock.add(new Capsule(10000.0f, Couleur.ROUGE, "Capsule rouge"));
         this.stock.add(new Capsule(10000.0f, Couleur.VERT, "Capsule vert"));
-        Catalogue catalogue = new Catalogue();
-        this.stock.addAll(catalogue.Vetements);
-        this.stock.addAll(catalogue.Nourritures);
-        this.stock.addAll(catalogue.Vehicules);
+        this.stock.addAll(Catalogue.Vetements);
+        this.stock.addAll(Catalogue.Nourritures);
+        this.stock.addAll(Catalogue.Vehicules);
         this.allstock.addAll(this.stock);
         return;
     }
@@ -77,16 +73,17 @@ public class Boutique {
         return true;
     }
 
-    public ArrayList<Stockables> acheterPanier() {
+    public boolean acheterPanier() {
         float prix = getPrixPanier();
         if (prix > utilisateur.getArgent()){
-            return null;
+            return false;
         }
-        ArrayList<Stockables> panier_achete = new ArrayList<>();
         for (Stockables elem : stock) {
-            panier_achete.add(acheter(elem));
+            if (acheter(elem) == false){
+                return false;
+            }
         }
-        return panier_achete;
+        return true;
     }
 
     public void ajouterPanier(Stockables sto) {

@@ -80,12 +80,12 @@ public class Utilisateur {
         this.vehicule.setType(vehicule.getType());
     }
 
-    public int retirerArgent(float prix){
+    public boolean retirerArgent(float prix){
         if(prix > this.argent){
-            return 0;
+            return false;
         }
         this.argent -= prix;
-        return 1;
+        return true;
     }
 
     public void ajoutElement(Stockables stockables){
