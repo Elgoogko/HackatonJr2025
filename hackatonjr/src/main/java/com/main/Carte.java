@@ -8,12 +8,11 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class Carte {
-    private List<Lieu> lieux;
-    private List<Chemin> chemins;
+    private ArrayList<Lieu> lieux;
+    private ArrayList<Chemin> chemins;
 
-    public Carte(List<Lieu> lieux, List<Chemin> chemins) {
-        this.lieux = lieux;
-        this.chemins = chemins;
+    public Carte() {
+        init_liste_lieux();
     }
 
     public List<Lieu> getLieux() {
@@ -84,23 +83,63 @@ public class Carte {
     }
 
     public ArrayList<Lieu> init_liste_lieux() {
-        ArrayList<Lieu> lieux = new ArrayList<Lieu>();
-        lieux.add(new Lieu(0, "Village du grand chef", 25, "C'est un village. Il est dirigé par un très grand chef.", null, new java.util.ArrayList<Chemin>(),
-                new Coordonnees(50, 1000)));
-        lieux.add(new Lieu(1, "Canyon central", 30, "Un canyon immense avec des parois abruptes.", null, new java.util.ArrayList<Chemin>(),
+        lieux = new ArrayList<Lieu>();
+        lieux.add(new Lieu(0, "Village du grand chef", 25, "C'est un village. Il est dirigé par un très grand chef.",
+                null, new java.util.ArrayList<Chemin>(),
+                new Coordonnees(50, 950)));
+        lieux.add(new Lieu(1, "Canyon central", 30, "Un canyon immense avec des parois abruptes.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(150, 850)));
-        lieux.add(new Lieu(2, "Vaisseau de Freezer", 5, "Le vaisseau spatial de Freezer est posé ici.", null, new java.util.ArrayList<Chemin>(),
+        lieux.add(new Lieu(2, "Vaisseau de Freezer", 5, "Le vaisseau spatial de Freezer est posé ici.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(75, 600)));
-        lieux.add(new Lieu(3, "Village de Moori", 28, "Un village paisible habité par des Nameks.", null, new java.util.ArrayList<Chemin>(),
+        lieux.add(new Lieu(3, "Village de Moori", 28, "Un village paisible habité par des Nameks.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(400, 500)));
-        lieux.add(new Lieu(4, "Maison de Guru", 15, "Maison du grand Namek Guru.", null, new java.util.ArrayList<Chemin>(),
+        lieux.add(new Lieu(4, "Maison de Guru", 15, "Maison du grand Namek Guru.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(600, 600)));
-        lieux.add(new Lieu(5, "Vieux temple", 22, "Un temple ancien et mystérieux.", null, new java.util.ArrayList<Chemin>(),
+        lieux.add(new Lieu(5, "Vieux temple", 22, "Un temple ancien et mystérieux.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(550, 50)));
-        lieux.add(new Lieu(6, "Fret de Namek", 27, "Un grand fret rempli de marchandises.", null, new java.util.ArrayList<Chemin>(),
+        lieux.add(new Lieu(6, "Fret de Namek", 27, "Un grand fret rempli de marchandises.", null,
+                new java.util.ArrayList<Chemin>(),
                 new Coordonnees(50, 50)));
-        
-                
+        lieux.add(new Lieu(7, "Pont rocheux", 26, "Un pont naturel fait de roches.", null,
+                new java.util.ArrayList<Chemin>(),
+                new Coordonnees(950, 300)));
+        lieux.add(new Lieu(8, "Temple sous-marin", 18, "Un temple mystérieux sous l'eau.", null,
+                new java.util.ArrayList<Chemin>(),
+                new Coordonnees(900, 800)));
+        lieux.add(new Lieu(9, "Mines de Namek", 29, "Des mines riches en minerais précieux.", null,
+                new java.util.ArrayList<Chemin>(),
+                new Coordonnees(750, 900)));
+
+        chemins = new ArrayList<Chemin>();
+        // relier les points qui se suivent entre eux
+        for (int i = 0; i < lieux.size() - 1; i++) {
+            Chemin c = new Chemin(lieux.get(i), lieux.get(i + 1), ModeTransport.TOUS);
+            chemins.add(c);
+            lieux.get(i).addChemin(c);
+        }
+        // relier quelques points supplémentaires
+        Chemin c1 = new Chemin(lieux.get(0), lieux.get(2), ModeTransport.NUAGE);
+        Chemin c2 = new Chemin(lieux.get(1), lieux.get(9), ModeTransport.VOITURE);
+        Chemin c3 = new Chemin(lieux.get(1), lieux.get(4), ModeTransport.TOUS);
+        Chemin c4 = new Chemin(lieux.get(2), lieux.get(6), ModeTransport.NUAGE);
+        chemins.add(c1);
+        chemins.add(c2);
+        chemins.add(c3);
+        chemins.add(c4);
+        lieux.get(0).addChemin(c1);
+        lieux.get(2).addChemin(c1);
+        lieux.get(1).addChemin(c2);
+        lieux.get(9).addChemin(c2);
+        lieux.get(1).addChemin(c3);
+        lieux.get(4).addChemin(c3);
+        lieux.get(2).addChemin(c4);
+        lieux.get(6).addChemin(c4);
+
         return lieux;
     }
 }
