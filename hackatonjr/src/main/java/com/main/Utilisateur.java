@@ -11,10 +11,10 @@ public class Utilisateur {
     private float argent;
     private int pv;
     private ArrayList<Stockables> inventaire;
-    private float faim;
-    private float temperature;
+    private int faim;
+    private int temperature;
 
-    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, float faim, float temperature){
+    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature){
         this.nom = nom;
         this.argent = argent;
         this.pv = pv;
@@ -55,10 +55,10 @@ public class Utilisateur {
     public void setInventaire(ArrayList<Stockables> inventaire){
         this.inventaire = inventaire;
     }
-    public void setFaim(float faim){
+    public void setFaim(int faim){
         this.faim = faim;
     }
-    public void setTemperature(float temperature){
+    public void setTemperature(int temperature){
         this.temperature = temperature;
     }
 
@@ -92,7 +92,30 @@ public class Utilisateur {
         }
     }
 
+    public void reduireFaim(int faim){
+        this.faim -= faim;
+        if(this.faim < 0){
+            this.faim = 0;
+        }
+    }
+
+    public void ajouterFaim(int faim){
+        this.faim += faim;
+        if(this.faim > 100){
+            this.faim = 100;
+        }
+    }
+
+    public void reduireTemperature(int temperature){
+        this.temperature -= temperature;
+    }
+
+    public void ajouterTemperature(int temperature){
+        this.temperature += temperature;
+    }
+
     public void manger(Nourriture nourriture){
-        ajouterPV(nourriture.getRenduFaim());
+        ajouterFaim(nourriture.getRenduFaim());
+        this.inventaire.remove(nourriture);
     }
 }

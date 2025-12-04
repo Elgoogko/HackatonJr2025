@@ -8,16 +8,16 @@ public class Stockables {
         this.prix = prix;
     }
 
-    public String Getnom() {
+    public String getNom() {
         return nom;
     }
-    public float Getprix() {
+    public float getPrix() {
         return prix;
     }
-    public void Setnom(String nom) {
+    public void setNom(String nom) {
         this.nom = nom;
     }
-    public void Setprix(float prix) {
+    public void setPrix(float prix) {
         this.prix = prix;
     } 
 
