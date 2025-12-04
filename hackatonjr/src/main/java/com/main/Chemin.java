@@ -1,14 +1,25 @@
 package com.main;
 
+enum ModeTransport {
+    VOITURE, NUAGE, TOUS
+}
+
 public class Chemin {
     private float distance;
     private Lieu lieuA;
     private Lieu lieuB;
+    private ModeTransport modeTransportOk;
 
-    public Chemin(Lieu lieuA, Lieu lieuB, float distance) {
+    public Chemin(Lieu lieuA, Lieu lieuB) {
+        // par defaut tous les modes de transport ok
+        this(lieuA, lieuB, ModeTransport.TOUS);
+    }
+
+    public Chemin(Lieu lieuA, Lieu lieuB, ModeTransport modeTransportAccepte) {
         this.lieuA = lieuA;
         this.lieuB = lieuB;
-        this.distance = distance;
+        this.distance = Coordonnees.distance(lieuA.getCoordonnees(), lieuB.getCoordonnees());
+        this.modeTransportOk = modeTransportAccepte;
     }
 
     public float getDistance() {
@@ -25,6 +36,10 @@ public class Chemin {
 
     public Lieu getLieuB() {
         return lieuB;
+    }
+
+    public ModeTransport getModeTransportOk() {
+        return modeTransportOk;
     }
 
     public void setLieuA(Lieu lieuA) {

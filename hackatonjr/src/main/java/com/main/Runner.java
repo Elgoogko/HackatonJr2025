@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class Runner {
     public static void main(String[] args) {
 
-        Lieu a = new Lieu(1, "A", 25, "Lieu A", null, new java.util.ArrayList<Chemin>());
-        Lieu b = new Lieu(2, "B", 30, "Lieu B", null, new java.util.ArrayList<Chemin>());
-        Lieu c = new Lieu(3, "C", 20, "Lieu C", null, new java.util.ArrayList<Chemin>());
+        Lieu a = new Lieu(1, "A", 25, "Lieu A", null, new java.util.ArrayList<Chemin>(), new Coordonnees(0,0));
+        Lieu b = new Lieu(2, "B", 30, "Lieu B", null, new java.util.ArrayList<Chemin>(), new Coordonnees(3,4));
+        Lieu c = new Lieu(3, "C", 20, "Lieu C", null, new java.util.ArrayList<Chemin>(), new Coordonnees(6,8));
 
-        Chemin ab = new Chemin(a, b, 5f);
-        Chemin bc = new Chemin(b, c, 2f);
-        Chemin ac = new Chemin(a, c, 5f);
+        Chemin ab = new Chemin(a, b, ModeTransport.TOUS);
+        Chemin bc = new Chemin(b, c, ModeTransport.TOUS);
+        Chemin ac = new Chemin(a, c, ModeTransport.VOITURE);
 
         a.addChemin(ab);
         a.addChemin(ac);
@@ -28,7 +28,7 @@ public class Runner {
         chemins.add(bc);
         chemins.add(ac);
         Carte carte = new Carte(lieux, chemins);
-        ArrayList<Lieu> chemin = carte.plusCourtChemin(a, c);
+        ArrayList<Lieu> chemin = carte.plusCourtChemin(a, a, ModeTransport.VOITURE);
         for (Lieu lieu : chemin) {
             System.out.println(lieu.getNom());
             

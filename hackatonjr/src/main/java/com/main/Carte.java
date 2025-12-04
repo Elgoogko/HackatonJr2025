@@ -24,7 +24,7 @@ public class Carte {
         return chemins;
     }
 
-    public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee) {
+    public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee, ModeTransport modeTransport) {
         // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
 
         // tab avec distance minimale entre chaque lieu et le départ
@@ -48,13 +48,14 @@ public class Carte {
             }
 
             for (Chemin chemin : courant.getChemins()) { // pour chaque chemin adjacent au lieu courant
+            
+                boolean transportOk = modeTransport == chemin.getModeTransportOk() || chemin.getModeTransportOk() == ModeTransport.TOUS;
                 Lieu voisin = chemin.getAutre(courant); // donne le lieu auquel mène le chemin
-
                 float nouvelleDist = distances.getOrDefault(courant, Float.MAX_VALUE)
                         + chemin.getDistance(); // dist = distance pour aller au courant (ou l'infini par defaut si
                                                 // vide) + distance du chemin
 
-                if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE)) {
+                if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE) && transportOk) {
                     // si cette nouvelle distance est plus courte que celle deja connue (tjr vrai si
                     // pas encore visitée)
                     distances.put(voisin, nouvelleDist);

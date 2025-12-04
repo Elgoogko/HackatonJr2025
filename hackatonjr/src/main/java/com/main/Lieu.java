@@ -10,15 +10,17 @@ public class Lieu {
     private String description;
     private Evenement evenement;
     private ArrayList<Chemin> chemins;
+    private Coordonnees coordonnees;
 
     public Lieu(int id, String nom, int temperature, String description, Evenement evenement,
-            ArrayList<Chemin> chemins) {
+            ArrayList<Chemin> chemins, Coordonnees coordonnees) {
         this.id = id;
         this.nom = nom;
         this.temperature = temperature;
         this.description = description;
         this.evenement = evenement;
         this.chemins = chemins;
+        this.coordonnees = coordonnees;
     }
 
     public int getId() {
@@ -45,8 +47,16 @@ public class Lieu {
         return chemins;
     }
 
+    public Coordonnees getCoordonnees() {
+        return coordonnees;
+    }
+
     public void addChemin(Chemin c) {
         chemins.add(c);
+    }
+
+    public void addAllChemins(ArrayList<Chemin> c) {
+        chemins.addAll(c);
     }
 
     public void setChemins(ArrayList<Chemin> chemins) {
