@@ -1,6 +1,7 @@
 package com.main;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Lieu {
     private int id;
@@ -44,6 +45,10 @@ public class Lieu {
         return chemins;
     }
 
+    public void addChemin(Chemin c) {
+        chemins.add(c);
+    }
+
     public void setChemins(ArrayList<Chemin> chemins) {
         this.chemins = chemins;
     }
@@ -57,6 +62,23 @@ public class Lieu {
                 ", description='" + description + '\'' +
                 ", evenement=" + evenement +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Lieu)) {
+            return false;
+        }
+        Lieu lieu = (Lieu) o;
+        return id == lieu.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

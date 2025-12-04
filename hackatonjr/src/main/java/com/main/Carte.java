@@ -1,6 +1,11 @@
 package com.main;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Carte {
     private List<Lieu> lieux;
@@ -10,11 +15,66 @@ public class Carte {
         this.lieux = lieux;
         this.chemins = chemins;
     }
+
     public List<Lieu> getLieux() {
         return lieux;
     }
+
     public List<Chemin> getChemins() {
         return chemins;
     }
-     
+
+    public ArrayList<Chemin> plusCourtChemin(Lieu depart, Lieu arrivee) {
+        // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
+
+        // tab avec distance minimale entre chaque lieu et le départ
+        Map<Lieu, Float> distances = new HashMap<>();
+
+        // Pour reconstruire le chemin final, tab des précédents
+        Map<Lieu, Lieu> precedent = new HashMap<>();
+
+        // Noeuds à explorer (ordre par distance minimale)
+        PriorityQueue<Lieu> file = new PriorityQueue<>(Comparator.comparing(distances::get));
+
+        // Initialisation
+        distances.put(depart, 0f);
+        file.add(depart);
+
+        while (!file.isEmpty()) { // tant qu'il reste des noeuds à explorer
+            Lieu courant = file.poll(); // Lieu avec la distance minimale et le retire
+
+            if (courant.equals(arrivee)) { // arrivée atteinte
+                break;
+            }
+
+            for (Chemin chemin : courant.getChemins()) { // pour chaque chemin adjacent au lieu courant
+                Lieu voisin = chemin.getAutre(courant); // donne le lieu auquel mène le chemin
+
+                float nouvelleDist = distances.getOrDefault(courant, Float.MAX_VALUE)
+                        + chemin.getDistance(); //
+
+                if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE)) {
+                    distances.put(voisin, nouvelleDist);
+                    precedent.put(voisin, courant);
+                    file.add(voisin);
+                }
+            }
+        }
+
+        // Reconstruction du chemin
+        ArrayList<Lieu> cheminFinal = new ArrayList<>();
+        Lieu actuel = arrivee;
+
+        while (actuel != null) {
+            cheminFinal.add(0, actuel);
+            actuel = precedent.get(actuel);
+        }
+
+        // Si le premier lieu n'est pas le départ → aucun chemin trouvé
+        if (cheminFinal.isEmpty() || !cheminFinal.get(0).equals(depart)) {
+            return new ArrayList<>();
+        }
+
+        return cheminFinal;
+    }
 }

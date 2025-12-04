@@ -30,4 +30,14 @@ public class Chemin {
     public void setLieuA(Lieu lieuA) {
         this.lieuA = lieuA;
     }
+
+    public Lieu getAutre(Lieu l) {
+        if (l == lieuA) {
+            return lieuB;
+        }
+        if (l == lieuB) {
+            return lieuA;
+        }
+        return null;
+    }
 }
