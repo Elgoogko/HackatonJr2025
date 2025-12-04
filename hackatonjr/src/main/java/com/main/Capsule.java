@@ -4,15 +4,13 @@ import com.main.Stockables;
 
 enum Couleur{ BLEU, ROUGE, VERT}
 
-public class Capsule {
+public class Capsule extends Stockables{
     private float prix;
     private Couleur couleur;
-    private Stockables object;
 
-    public Capsule(float prix, Couleur couleur, Stockables object) {
-        this.prix = prix;
+    public Capsule(float prix, Couleur couleur, String nom) {
+        super(nom, prix);
         this.couleur = couleur;
-        this.object = object;
     }
 
     public float getPrix() {
@@ -22,22 +20,21 @@ public class Capsule {
     public Couleur getCouleur() {
         return couleur;
     }
-
-    public Stockables getObject() {
-        return object;
+    //TODO
+    public Stockables getObjetAleatoire(){
+        switch (this.couleur) {
+            case BLEU:
+                
+                break;
+            case ROUGE:
+                break;
+            case VERT:
+                break;
+            default:
+                break;
+        }
+        return null;
     }
 
-    public void setObject(Stockables object) {
-        this.object = object;
-    }
-
-    @Override
-    public String toString() {
-        return "Capsule{" +
-                "prix=" + prix +
-                ", couleur='" + couleur + '\'' +
-                ", object=" + object +
-                '}';
-    }
 
 }

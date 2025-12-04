@@ -4,14 +4,14 @@ import com.main.Stockables;
 
 enum TYPE{Voiture,Pilier,Nuage};
 
-public class Vehicules {
+public class Vehicules extends Stockables {
     private float vitesse;
     private String nom;
     private TYPE type;
 
-    public Vehicules(float vitesse, String nom){
+    public Vehicules(float vitesse, String nom, TYPE type, float prix){
+        super(nom, prix);
         this.vitesse = vitesse;
-        this.nom = nom;
     } 
 
     public float getVitesse(){
