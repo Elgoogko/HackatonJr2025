@@ -1,0 +1,40 @@
+package com.main;
+
+import com.main.Stockables;
+
+enum TYPE{Voiture,Pilier,Nuage};
+
+public class Vehicules {
+    private float vitesse;
+    private String nom;
+    private TYPE type;
+
+    public Vehicules(float vitesse, String nom){
+        this.vitesse = vitesse;
+        this.nom = nom;
+    } 
+
+    public float getVitesse(){
+        return this.vitesse;
+    }
+
+    public String getNom(){
+        return this.nom;
+    }
+
+    public void setVitesse(float vitesse){
+        this.vitesse = vitesse;
+    }
+
+    public void setNom(String nom){
+        this.nom = nom;
+    }
+
+    public TYPE getType(){
+        return this.type;
+    }
+
+    public void setType(TYPE type){
+        this.type = type;
+    }
+}
