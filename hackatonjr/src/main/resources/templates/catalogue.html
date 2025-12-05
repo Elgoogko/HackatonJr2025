@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://wwww.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,30 +10,75 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            padding: 20px;
+            display: flex;              /* sidebar + contenu côte à côte */
+            min-height: 100vh;
         }
-        
+
+        /* ===== SIDEBAR GAUCHE ===== */
+        .sidebar {
+            width: 80px;
+            background-color: #111827;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #1f2937;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #e5e7eb;
+            font-size: 22px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .nav-btn:hover {
+            background-color: #4b5563;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active {
+            background-color: #2563eb;
+        }
+
+        /* ===== CONTENU PRINCIPAL ===== */
         .container {
+            flex: 1;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 20px 30px;
         }
-        
+
         h1 {
             text-align: center;
             margin-bottom: 30px;
             color: #333;
         }
-        
+
+        h2 {
+            margin: 20px 0 10px;
+            color: #444;
+        }
+
         .catalogue-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
         }
-        
+
         .product-card {
             background: white;
             border-radius: 8px;
@@ -41,45 +86,53 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 160px;
             background-color: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
+            font-size: 14px;
+            overflow: hidden;
         }
-        
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .product-info {
             padding: 15px;
         }
-        
+
         .product-name {
             font-size: 18px;
             font-weight: bold;
             color: #333;
             margin-bottom: 8px;
         }
-        
+
         .product-description {
             font-size: 14px;
             color: #666;
             margin-bottom: 10px;
         }
-        
+
         .product-price {
             font-size: 20px;
             font-weight: bold;
             color: #2196F3;
             margin-bottom: 10px;
         }
-        
+
         .btn-add {
             width: 100%;
             padding: 10px;
@@ -90,15 +143,165 @@
             cursor: pointer;
             font-size: 14px;
         }
-        
+
         .btn-add:hover {
             background-color: #1976D2;
         }
     </style>
 </head>
 <body>
-    <span th:text="${catalogue.Vetements.get(0).getNom()}">
 
-    </span>
+<div class="sidebar">
+    <a th:href="@{/catalogue}" class="nav-btn active" title="Boutique">
+        🛒
+    </a>
+
+    <a th:href="@{/carte}" class="nav-btn" title="Carte">
+        🗺️
+    </a>
+
+    <a th:href="@{/notifications}" class="nav-btn" title="Notifications">
+        🔔
+    </a>
+
+    <a th:href="@{/astuces}" class="nav-btn" title="Astuces">
+        💡
+    </a>
+
+    <a th:href="@{/reglages}" class="nav-btn" title="Réglages">
+        ⚙️
+    </a>
+</div>
+
+<div class="container">
+
+    <h1>Catalogue Namek</h1>
+
+<h2>Vêtements</h2>
+<div class="catalogue-grid">
+    <div class="product-card" th:each="v : ${catalogue.Vetements}">
+        <div class="product-image" th:switch="${v.nom}">
+            
+            <img th:case="'Chapeau de Chaozu'" 
+                 th:src="'https://cdn.shopify.com/s/files/1/0252/1736/8154/files/Chiaotzu_DB_Ep_134_002_480x480.png?v=1609582654'" 
+                 alt="Chapeau de Chaozu">
+
+            <img th:case="'Echarpe'" 
+                 th:src="'https://i.imgur.com/58YkXpD.png'" 
+                 alt="Écharpe">
+
+            <img th:case="'Turban de Piccolo'" 
+                 th:src="'https://i.imgur.com/w6kEVuN.png'" 
+                 alt="Turban de Piccolo">
+
+            <img th:case="'Haut de Goku'" 
+                 th:src="'https://i.imgur.com/VlMZBpn.jpeg'" 
+                 alt="Haut de Goku">
+
+            <img th:case="'Haut de Piccolo'" 
+                 th:src="'https://i.imgur.com/IT0bu2E.jpeg'" 
+                 alt="Haut Piccolo">
+
+            <img th:case="'Haut de Vegeta'" 
+                 th:src="'https://i.imgur.com/wnk8YBc.png'" 
+                 alt="Haut Vegeta">
+
+            <img th:case="'Bas de Goku'" 
+                 th:src="'https://i.imgur.com/4dK5VFV.jpeg'" 
+                 alt="Bas Goku">
+
+            <img th:case="'Bas de Vegeta'" 
+                 th:src="'https://i.imgur.com/XnJWHyE.jpeg'" 
+                 alt="Bas Vegeta">
+
+            <img th:case="'Bas de Piccolo'" 
+                 th:src="'https://i.imgur.com/66LzCMh.png'" 
+                 alt="Bas Piccolo">
+
+            <span th:case="*">Pas d'image</span>
+        </div>
+
+        <div class="product-info">
+            <div class="product-name" th:text="${v.nom}"></div>
+            <div class="product-description">
+                Type : <span th:text="${v.type}"></span>
+            </div>
+            <div class="product-price" th:text="${v.prix + ' zénis'}"></div>
+            <button class="btn-add">Ajouter au panier</button>
+        </div>
+    </div>
+</div>
+
+
+<h2>Nourriture</h2>
+<div class="catalogue-grid">
+    <div class="product-card" th:each="n : ${catalogue.Nourritures}">
+        <div class="product-image" th:switch="${n.nom}">
+
+            <img th:case="'Senzu'" 
+                 th:src="'https://i.imgur.com/MbZcYwF.png'" 
+                 alt="Senzu">
+
+            <img th:case="'Gibier'" 
+                 th:src="'https://i.imgur.com/ljujzEP.jpeg'" 
+                 alt="Gibier">
+
+            <img th:case="'Ramen'" 
+                 th:src="'https://i.imgur.com/hgDNEzP.jpeg'" 
+                 alt="Ramen">
+
+            <img th:case="'Burger'" 
+                 th:src="'https://i.imgur.com/3oFJbcE.jpeg'" 
+                 alt="Burger">
+
+            <span th:case="*">Pas d'image</span>
+        </div>
+
+        <div class="product-info">
+            <div class="product-name" th:text="${n.nom}"></div>
+            <div class="product-description">
+                Rendu faim : <span th:text="${n.renduFaim}"></span>
+            </div>
+            <div class="product-price" th:text="${n.prix + ' zénis'}"></div>
+            <button class="btn-add">Ajouter au panier</button>
+        </div>
+    </div>
+</div>
+
+
+<h2>Véhicules</h2>
+<div class="catalogue-grid">
+    <div class="product-card" th:each="veh : ${catalogue.Vehicules}">
+        <div class="product-image" th:switch="${veh.nom}">
+
+            <img th:case="'Voiture'" 
+                 th:src="'https://i.imgur.com/9mcUjW0.png'" 
+                 alt="Voiture">
+
+            <img th:case="'Nuage Magique'" 
+                 th:src="'https://i.imgur.com/4ojeG1f.png'" 
+                 alt="Nuage Magique">
+
+            <img th:case="'Pilier'" 
+                 th:src="'https://i.imgur.com/AZH1daL.jpeg'"
+                 alt="Pilier">
+
+            <span th:case="*">Pas d'image</span>
+        </div>
+
+        <div class="product-info">
+            <div class="product-name" th:text="${veh.nom}"></div>
+            <div class="product-description">
+                Type : <span th:text="${veh.type}"></span><br>
+                Vitesse : <span th:text="${veh.vitesse}"></span>
+            </div>
+            <div class="product-price" th:text="${veh.prix + ' zénis'}"></div>
+            <button class="btn-add">Ajouter au panier</button>
+        </div>
+    </div>
+</div>
+
+
+</div>
 </body>
 </html>
