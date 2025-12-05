@@ -11,6 +11,7 @@ public class Lieu {
     private Evenement evenement;
     private ArrayList<Chemin> chemins;
     private Coordonnees coordonnees;
+    private boolean condamne = false;
 
     public Lieu(int id, String nom, int temperature, String description, Evenement evenement,
             ArrayList<Chemin> chemins, Coordonnees coordonnees) {
@@ -51,6 +52,10 @@ public class Lieu {
         return coordonnees;
     }
 
+    public boolean estCondamne() {
+        return condamne;
+    }
+
     public void addChemin(Chemin c) {
         chemins.add(c);
     }
@@ -61,6 +66,10 @@ public class Lieu {
 
     public void setChemins(ArrayList<Chemin> chemins) {
         this.chemins = chemins;
+    }
+
+    public void setCondamne(boolean condamne) {
+        this.condamne = condamne;
     }
 
 

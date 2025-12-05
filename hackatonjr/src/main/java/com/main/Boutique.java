@@ -17,12 +17,14 @@ public class Boutique {
 
     public Boutique() {
         this.stock = new ArrayList<>();
+        this.allstock = new ArrayList<>();
         this.stock.add(new Capsule(10000.0f, Couleur.BLEU, "Capsule bleu"));
         this.stock.add(new Capsule(10000.0f, Couleur.ROUGE, "Capsule rouge"));
         this.stock.add(new Capsule(10000.0f, Couleur.VERT, "Capsule vert"));
-        this.stock.addAll(Catalogue.Vetements);
-        this.stock.addAll(Catalogue.Nourritures);
-        this.stock.addAll(Catalogue.Vehicules);
+        Catalogue catalogue = new Catalogue();
+        this.stock.addAll(catalogue.Vetements);
+        this.stock.addAll(catalogue.Nourritures);
+        this.stock.addAll(catalogue.Vehicules);
         this.allstock.addAll(this.stock);
         return;
     }
