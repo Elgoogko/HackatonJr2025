@@ -19,15 +19,15 @@ public class Runner {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
+        Carte carte = new Carte();
+
         Vetement haut = new Vetement(0, TYPE_VETEMENT.Haut, "none", 0);
         Vetement bas = new Vetement(0, TYPE_VETEMENT.Bas, "none", 0);
         Vetement tete = new Vetement(0, TYPE_VETEMENT.Tete, "none", 0);
 
         Tenue tenue = new Tenue(haut, bas, tete);
         Vehicules vehicule = new Vehicules(20, "pieds", TYPE.Pieds, 0);
-        Lieu lieu = new Lieu(0, "Village du grand chef", 25, "C'est un village. Il est dirigé par un très grand chef.",
-                null, new java.util.ArrayList<Chemin>(),
-                new Coordonnees(50, 950));
+        Lieu lieu = carte.getLieux().get(0);
 
         Utilisateur utilisateur = new Utilisateur("", 100000, 100, new ArrayList<>(), 100, 20, tenue, vehicule, lieu);
         
@@ -42,17 +42,12 @@ public class Runner {
         System.out.println("Votre personnage a comme véhicule : " + utilisateur.getVehicules().getNom());
         System.out.println("Vous commencez avec " + utilisateur.getArgent() + " zénis\n");
 
-        Carte carte = new Carte();
-
         Boutique boutique = new Boutique(utilisateur);
         int choix = -1, choix2 = -1, choix3 = -1, choix4 = -1, choix5 = -1, choix6 = -1, indice = -1, indice2 = -1, reponse = -1;
         boolean verif;
 
         ArrayList<Lieu> lieux = new ArrayList<Lieu>();
         ModeTransport transport;
-
-        System.out.print(carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(1), ModeTransport.VOITURE));
-
 
         while(choix != 0){
             System.out.println("\n=== MENU ===");
