@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue</title>
+    <title>Carte</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            display: flex;              /* sidebar + contenu côte à côte */
+            display: flex;
             min-height: 100vh;
         }
 
-        /* ===== SIDEBAR GAUCHE ===== */
         .sidebar {
             width: 80px;
             background-color: #111827;
@@ -45,21 +41,14 @@
             transition: background-color 0.2s, transform 0.1s;
         }
 
-        .nav-btn:hover {
-            background-color: #4b5563;
-            transform: translateY(-1px);
-        }
+        .nav-btn:hover { background-color: #4b5563; transform: translateY(-1px); }
+        .nav-btn.active { background-color: #2563eb; }
 
-        .nav-btn.active {
-            background-color: #2563eb;
-        }
-
-        /* ===== CONTENU PRINCIPAL ===== */
         .container {
             flex: 1;
+            padding: 20px 30px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 30px;
         }
 
         h1 {
@@ -68,117 +57,139 @@
             color: #333;
         }
 
-        h2 {
-            margin: 20px 0 10px;
-            color: #444;
-        }
-
-        .catalogue-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
+        .form-block {
             background: white;
+            padding: 15px 20px;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 160px;
-            background-color: #e0e0e0;
+            margin-bottom: 20px;
             display: flex;
-            align-items: center;
+            gap: 20px;
             justify-content: center;
-            color: #999;
+        }
+
+        select, button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
             font-size: 14px;
-            overflow: hidden;
         }
 
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 15px;
-        }
-
-        .product-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .product-description {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .product-price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2196F3;
-            margin-bottom: 10px;
-        }
-
-        .btn-add {
-            width: 100%;
-            padding: 10px;
+        button {
             background-color: #2196F3;
-            color: white;
             border: none;
-            border-radius: 4px;
+            color: white;
             cursor: pointer;
-            font-size: 14px;
         }
 
-        .btn-add:hover {
-            background-color: #1976D2;
+        button:hover { background-color: #1976D2; }
+
+        svg {
+            width: 100%;
+            height: 600px;
+            background: #e0f2f1;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .lieux circle {
+            cursor: pointer;
+            transition: 0.2s;
+            stroke: #222;
+            stroke-width: 1;
+        }
+
+        .lieux circle:hover {
+            stroke-width: 2;
         }
     </style>
 </head>
+
 <body>
 
 <div class="sidebar">
-    <a href="/Catalogue" class="nav-btn active" title="Boutique">
-        🛒
-    </a>
-
-    <a href="/Carte" class="nav-btn" title="Carte">
-        🗺️
-    </a>
-
-    <a href="/Notifications" class="nav-btn" title="Notifications">
-        🔔
-    </a>
-
-    <a href="/Astuces" class="nav-btn" title="Astuces">
-        💡
-    </a>
-
-    <a href="/Reglages" class="nav-btn" title="Réglages">
-        ⚙️
-    </a>
+    <a href="/Catalogue" class="nav-btn" title="Boutique">🛒</a>
+    <a href="/Carte" class="nav-btn active" title="Carte">🗺️</a>
+    <a href="/Notifications" class="nav-btn" title="Notifications">🔔</a>
+    <a href="/Astuces" class="nav-btn" title="Astuces">💡</a>
+    <a href="/Reglages" class="nav-btn" title="Réglages">⚙️</a>
 </div>
 
-<div class="Container">
+<div class="container">
 
     <h1>Carte Namek</h1>
 
+    <!-- FORMULAIRE AVEC ÉTAPE -->
+    <form class="form-block" method="get">
 
+        <label>Départ :
+            <select name="depart" id="depart">
+                <option value="">—</option>
+                <option th:each="l : ${lieux}" th:value="${l.nom}" th:text="${l.nom}"></option>
+            </select>
+        </label>
 
+        <label>Étape :
+            <select name="etape" id="etape">
+                <option value="">—</option>
+                <option th:each="l : ${lieux}" th:value="${l.nom}" th:text="${l.nom}"></option>
+            </select>
+        </label>
+
+        <label>Arrivée :
+            <select name="arrivee" id="arrivee">
+                <option value="">—</option>
+                <option th:each="l : ${lieux}" th:value="${l.nom}" th:text="${l.nom}"></option>
+            </select>
+        </label>
+
+        <button type="submit">Calculer</button>
+    </form>
+
+    <!-- SVG -->
+    <svg>
+        <!-- Chemins -->
+        <g class="chemins">
+            <line th:each="c : ${chemins}"
+                  th:attr="x1=${c.a.x}, y1=${c.a.y}, x2=${c.b.x}, y2=${c.b.y}"
+                  stroke="#8bc34a" stroke-width="3"/>
+        </g>
+
+        <!-- Lieux -->
+        <g class="lieux">
+            <g th:each="l : ${lieux}">
+                <circle th:attr="cx=${l.x}, cy=${l.y}" r="10"
+                        fill="#4caf50"
+                        th:data-nom="${l.nom}"></circle>
+                <text th:attr="x=${l.x + 14}, y=${l.y + 4}"
+                      font-size="14" fill="#1b5e20"
+                      th:text="${l.nom}"></text>
+            </g>
+        </g>
+
+        <!-- Polyline du chemin -->
+        <polyline th:if="${chemin != null}"
+                  stroke="red" stroke-width="4"
+                  fill="none"
+                  th:attr="points=${#strings.join(chemin, ' ')}"/>
+    </svg>
+</div>
+
+<!-- JS MINIMAL -->
+<script>
+document.addEventListener("click", e => {
+    if (!e.target.dataset.nom) return;
+    const nom = e.target.dataset.nom;
+
+    const d = document.getElementById("depart");
+    const ept = document.getElementById("etape");
+    const a = document.getElementById("arrivee");
+
+    if (!d.value) d.value = nom;
+    else if (!ept.value) ept.value = nom;
+    else a.value = nom;
+});
+</script>
 
 </body>
 </html>

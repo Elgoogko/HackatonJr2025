@@ -164,6 +164,7 @@ public class Carte {
             Chemin c = new Chemin(lieux.get(i), lieux.get(i + 1), ModeTransport.TOUS);
             chemins.add(c);
             lieux.get(i).addChemin(c);
+            lieux.get(i + 1).addChemin(c);
         }
         // relier quelques points supplémentaires
         Chemin c1 = new Chemin(lieux.get(0), lieux.get(2), ModeTransport.NUAGE);

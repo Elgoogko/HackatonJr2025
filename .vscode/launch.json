@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Runner",
+            "request": "launch",
+            "mainClass": "com.main.hackatonjr.Runner",
+            "projectName": "hackatonjr"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HackatonjrApplication<hackatonjr>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.main.hackatonjr.HackatonjrApplication",
+            "projectName": "hackatonjr",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
