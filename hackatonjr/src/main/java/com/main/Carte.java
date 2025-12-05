@@ -102,7 +102,7 @@ public class Carte {
         lieux.add(new Lieu(5, "Vieux temple", 22, "Un temple ancien et mystérieux.", null,
                 new java.util.ArrayList<Chemin>(),
                 new Coordonnees(550, 50)));
-        lieux.add(new Lieu(6, "Fret de Namek", 27, "Un grand fret rempli de marchandises.", null,
+        lieux.add(new Lieu(6, "Fôret de Namek", 27, "Un grand fret rempli de marchandises.", null,
                 new java.util.ArrayList<Chemin>(),
                 new Coordonnees(50, 50)));
         lieux.add(new Lieu(7, "Pont rocheux", 26, "Un pont naturel fait de roches.", null,

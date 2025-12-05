@@ -25,7 +25,7 @@ public class Test {
         Utilisateur user = new Utilisateur(nomPerso, 1000, 100, new ArrayList<>(), 100, 20, tenue, vehicule);
         System.out.println("Bienvenue " + user.getNom() + " !");
         System.out.println("Votre personnage porte une tenue  composé de " + user.getTenue().getBas().getNom() + ", " + user.getTenue().getHaut().getNom() + " et " + user.getTenue().getTete().getNom());
-        System.out.println("Votre personnage a comme véhicule :" + user.getVehicules().getNom() + " ");
+        System.out.println("Votre personnage a comme véhicule : " + user.getVehicules().getNom() + " ");
         System.out.println("Vous commencez avec " + user.getArgent() + " zénis\n");
 
         
