@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 public class Page_controleur {
     @Autowired
     private Catalogue catalogue;
+    @Autowired
+    private Carte carte;
+
     @RequestMapping("/")
     public String index() {
         return "index";
     }
+
     @RequestMapping("/Catalogue")
     public String requestMethodCatalogue(Model model) {
 
@@ -23,5 +26,12 @@ public class Page_controleur {
 
         return "catalogue";
     }
-    
+
+    @RequestMapping("/Carte")
+    public String requestMethodCarte(Model model) {
+
+        model.addAttribute(carte);
+        return "carte";
+    }
+
 }

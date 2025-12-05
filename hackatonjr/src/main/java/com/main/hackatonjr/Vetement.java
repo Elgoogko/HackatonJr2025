@@ -2,8 +2,6 @@ package com.main.hackatonjr;
 
 import com.main.hackatonjr.Stockables;
 
-enum TYPE_VETEMENT {Tete, Haut, Bas};
-
 public class Vetement extends Stockables {
     private float chaleur;
     private TYPE_VETEMENT type;

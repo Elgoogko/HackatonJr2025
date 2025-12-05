@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Carte {
     private ArrayList<Lieu> lieux;
     private ArrayList<Chemin> chemins;
