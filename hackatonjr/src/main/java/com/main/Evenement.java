@@ -11,6 +11,7 @@ public class Evenement {
 
     private String ennemi;
     private List<Lieu> lieuxCibles;
+    
 
     public static Evenement histoire(int triggerTimeSec, String description) {
         Evenement e = new Evenement();
@@ -53,5 +54,6 @@ public class Evenement {
     public List<Lieu> getLieuxCibles() {
         return lieuxCibles;
     }
+    
 }
     

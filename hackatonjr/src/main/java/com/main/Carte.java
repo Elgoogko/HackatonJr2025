@@ -61,7 +61,8 @@ public class Carte {
                         + chemin.getDistance(); // dist = distance pour aller au courant (ou l'infini par defaut si
                                                 // vide) + distance du chemin
 
-                if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE) && transportOk) {
+                if (nouvelleDist < distances.getOrDefault(voisin, Float.MAX_VALUE) && transportOk
+                        && !voisin.estCondamne()) {
                     // si cette nouvelle distance est plus courte que celle deja connue (tjr vrai si
                     // pas encore visitée)
                     distances.put(voisin, nouvelleDist);
