@@ -25,7 +25,13 @@ public class Carte {
 
     public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee, ModeTransport modeTransport) {
         // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
-
+        if (modeTransport == ModeTransport.PILIER) {
+            //mode pilier : on peut aller directement au lieu d'arrivée
+            ArrayList<Lieu> cheminsFinal = new ArrayList<Lieu>();
+            cheminsFinal.add(depart);
+            cheminsFinal.add(arrivee);
+            return cheminsFinal;
+        }
         // tab avec distance minimale entre chaque lieu et le départ
         Map<Lieu, Float> distances = new HashMap<>();
 
