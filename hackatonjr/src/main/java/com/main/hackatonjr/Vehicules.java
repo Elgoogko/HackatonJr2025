@@ -6,7 +6,6 @@ enum TYPE{Voiture,Pilier,Nuage, Pieds};
 
 public class Vehicules extends Stockables {
     private float vitesse;
-    private String nom;
     private TYPE type;
 
     public Vehicules(float vitesse, String nom, TYPE type, float prix) {
@@ -32,10 +31,6 @@ public class Vehicules extends Stockables {
 
     public TYPE getType() {
         return this.type;
-    }
-
-    public String getNom() {
-        return this.nom;
     }
 
     public void setType(TYPE type) {

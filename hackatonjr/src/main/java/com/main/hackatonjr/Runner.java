@@ -50,6 +50,7 @@ public class Runner {
         ModeTransport transport;
 
         while(choix != 0){
+            choix5 = -1;
             System.out.println("\n=== MENU ===");
             System.out.println("1 - Ouvrir l'inventaire");
             System.out.println("2 - Ouvrir la boutique");
@@ -149,6 +150,7 @@ public class Runner {
                                     }while(reponse == 1);
 
                                     verif = boutique.acheterPanier();
+                                    boutique.viderPanier();
                                     if(verif == true){
                                         System.out.println("L'achat a été effectué avec succés");
                                     }
@@ -236,13 +238,14 @@ public class Runner {
                                             System.out.print("Donnez le numéro du lieu par lequel vous voulez passer : ");
                                             indice2 = Integer.parseInt(sc.nextLine());
                                         }while(indice2 < 1 || indice2 > carte.getLieux().size());
-                                        //lieux = carte.plusCourtChemin(utilisateur.getLieu(), carte.getLieux(), utilisateur.getVehicules().getType());
+                                        lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), transport);
                                     }
                                     else{
                                         lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
                                     }
-                                    System.out.println("Vous êtes passé par les lieux suivants : ");
-                                    System.out.print(lieux);
+                                    Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
+                                    Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
+                                    System.out.println("Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
                                     for(Lieu l : lieux){
                                         System.out.println("->" + l.getNom());
                                     }
@@ -260,10 +263,10 @@ public class Runner {
                     default:
                         System.out.println("Choix invalide");
                 }
-                if((choix == -1 && choix2 == 2) || (choix == -1 && choix4 == 1) || (choix == -1 && choix5 == 1)){
+                if((choix == -1 && choix2 == 2) || (choix == -1 && choix4 == 1) || (choix == -1 && choix5 == 1) || choix5 != 2){
                     break;
                 }
-            }while(choix != 0 && choix != 1 && choix != 2 && choix != 3);
+            }while(choix != 0 && choix != 1 && choix != 2 && choix != 3 && choix5 != 2);
         }
 
         sc.close();

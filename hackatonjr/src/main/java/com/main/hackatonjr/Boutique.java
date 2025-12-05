@@ -11,7 +11,6 @@ enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}
 public class Boutique {
     private ArrayList<Stockables> stock;
     private ArrayList<Stockables> panier;
-    @Autowired
     private Utilisateur utilisateur;
 
     public Boutique(Utilisateur utilisateur) {
@@ -128,6 +127,10 @@ public class Boutique {
             System.out.println(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
             compteur++;
         }
+    }
+
+    public void viderPanier(){
+        this.panier = new ArrayList<Stockables>();
     }
 
     @Override
