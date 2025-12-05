@@ -1,6 +1,6 @@
-package com.main;
+package com.main.hackatonjr;
 
-import com.main.Stockables;
+import com.main.hackatonjr.Stockables;
 
 enum TYPE_VETEMENT {Tete, Haut, Bas};
 

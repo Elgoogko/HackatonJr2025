@@ -1,4 +1,4 @@
-package com.main;
+package com.main.hackatonjr;
 import com.main.*;
 
 import java.util.ArrayList;

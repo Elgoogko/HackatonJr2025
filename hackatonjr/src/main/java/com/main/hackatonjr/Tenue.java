@@ -1,4 +1,4 @@
-package com.main;
+package com.main.hackatonjr;
 
 public class Tenue {
     private Vetement haut;

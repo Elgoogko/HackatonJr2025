@@ -1,8 +1,11 @@
-package com.main;
+package com.main.hackatonjr;
 import java.util.ArrayList;
 import java.util.random.RandomGenerator;
 
+import org.springframework.stereotype.Component;
+
 import com.main.*;
+@Component
 public class Catalogue {
     public static ArrayList<Vetement> Vetements = new ArrayList<>();
     public static ArrayList<Nourriture> Nourritures = new ArrayList<>();

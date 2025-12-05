@@ -1,7 +1,8 @@
-package com.main;
+package com.main.hackatonjr;
 
 public class Stockables {
     private String nom;
+    private String image;
     private float prix;
     public Stockables(String nom, float prix) {
         this.nom = nom;

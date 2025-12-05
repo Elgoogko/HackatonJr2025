@@ -1,4 +1,4 @@
-package com.main;
+package com.main.hackatonjr;
 
 public class Coordonnees {
     private float x;
