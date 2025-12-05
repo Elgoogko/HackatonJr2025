@@ -186,4 +186,32 @@ public class Carte {
 
         return lieux;
     }
+
+    public void afficherLieux(){
+        int compteur=1;
+        System.out.println("Lieux (" + this.lieux.size() + " éléments) : ");
+        for(Lieu lieu : this.lieux){
+            System.out.println(compteur + ". " + lieu.getNom());
+            compteur++;
+        }
+    }
+
+    public void afficherChemins(){
+        int compteur=1;
+        System.out.println("\nChemins : ");
+        for(Lieu lieu : this.lieux){
+            ArrayList<Chemin> chemins = lieu.getChemins();
+            System.out.println(compteur + ". " + lieu.getNom());
+            for(Chemin c : chemins){
+                if(c.getLieuA() == lieu){
+                    System.out.println("## " + c.getLieuA().getNom() + " --> " + c.getLieuB().getNom());
+                }
+                else{
+                    System.out.println("## " + c.getLieuB().getNom() + " --> " + c.getLieuA().getNom());
+                }
+            }
+            System.out.print("\n");
+            compteur++;
+        }
+    }
 }

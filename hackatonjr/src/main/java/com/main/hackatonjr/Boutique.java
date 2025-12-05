@@ -10,14 +10,12 @@ enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}
 
 public class Boutique {
     private ArrayList<Stockables> stock;
-    private ArrayList<Stockables> allstock;
     private ArrayList<Stockables> panier;
     @Autowired
     private Utilisateur utilisateur;
 
-    public Boutique() {
+    public Boutique(Utilisateur utilisateur) {
         this.stock = new ArrayList<>();
-        this.allstock = new ArrayList<>();
         this.stock.add(new Capsule(10000.0f, Couleur.BLEU, "Capsule bleu"));
         this.stock.add(new Capsule(10000.0f, Couleur.ROUGE, "Capsule rouge"));
         this.stock.add(new Capsule(10000.0f, Couleur.VERT, "Capsule vert"));
@@ -25,7 +23,8 @@ public class Boutique {
         this.stock.addAll(catalogue.Vetements);
         this.stock.addAll(catalogue.Nourritures);
         this.stock.addAll(catalogue.Vehicules);
-        this.allstock.addAll(this.stock);
+        this.panier = new ArrayList<>();
+        this.utilisateur = utilisateur;
         return;
     }
 
@@ -35,41 +34,28 @@ public class Boutique {
 
     public boolean acheter(Stockables sto) {
         float prix = sto.getPrix();
-        if (sto.getPrix() > utilisateur.getArgent()){
+        if (sto.getPrix() > this.utilisateur.getArgent()){
             return false;
         }
-        if(utilisateur.retirerArgent(prix) == false){
+        if(this.utilisateur.retirerArgent(prix) == false){
             return false;
         }
         
         if (sto instanceof Capsule) {
-            ArrayList<Stockables> arrayCouleur = new ArrayList<>();
+            Catalogue catalogue = new Catalogue();
 
             if(((Capsule)sto).getCouleur() == Couleur.BLEU){
-                for(Stockables s : this.allstock){
-                    if(s instanceof Vetement){
-                        arrayCouleur.add(s);
-                    }
-                }
+                this.utilisateur.ajoutElement(catalogue.Vetements.get(ThreadLocalRandom.current().nextInt(catalogue.Vetements.size())));
             }
             else if(((Capsule)sto).getCouleur() == Couleur.ROUGE){
-                for(Stockables s : this.allstock){
-                    if(s instanceof Vehicules){
-                        arrayCouleur.add(s);
-                    }
-                }
+                this.utilisateur.ajoutElement(catalogue.Vehicules.get(ThreadLocalRandom.current().nextInt(catalogue.Vehicules.size())));
             }
             else{
-                for(Stockables s : this.allstock){
-                    if(s instanceof Nourriture){
-                        arrayCouleur.add(s);
-                    }
-                }
+                this.utilisateur.ajoutElement(catalogue.Nourritures.get(ThreadLocalRandom.current().nextInt(catalogue.Nourritures.size())));
             }
-            utilisateur.ajoutElement(arrayCouleur.get(ThreadLocalRandom.current().nextInt(arrayCouleur.size())));
         }
         else{
-            utilisateur.ajoutElement(sto);
+            this.utilisateur.ajoutElement(sto);
             this.stock.remove(sto);
         }
         return true;
@@ -77,10 +63,11 @@ public class Boutique {
 
     public boolean acheterPanier() {
         float prix = getPrixPanier();
-        if (prix > utilisateur.getArgent()){
+        if (prix > this.utilisateur.getArgent()){
             return false;
         }
-        for (Stockables elem : stock) {
+        ArrayList<Stockables> copie = new ArrayList<>(panier);
+        for (Stockables elem : copie) {
             if (acheter(elem) == false){
                 return false;
             }
@@ -131,6 +118,15 @@ public class Boutique {
                     stock.set(j + 1, current);
                 }
             }
+        }
+    }
+
+    public void afficherBoutique(){
+        int compteur=1;
+        System.out.println("Boutique (" + this.stock.size() + " éléments) : ");
+        for(Stockables stockable : this.stock){
+            System.out.println(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
+            compteur++;
         }
     }
 

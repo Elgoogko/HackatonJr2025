@@ -12,6 +12,7 @@ public class Vehicules extends Stockables {
     public Vehicules(float vitesse, String nom, TYPE type, float prix) {
         super(nom, prix);
         this.vitesse = vitesse;
+        this.type = type;
     }
 
     public float getVitesse() {

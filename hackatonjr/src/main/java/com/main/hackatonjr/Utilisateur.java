@@ -2,6 +2,8 @@ package com.main.hackatonjr;
 
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+
 import com.main.*;
 
 public class Utilisateur {
@@ -13,8 +15,9 @@ public class Utilisateur {
     private int temperature;
     private Tenue tenue;
     private Vehicules vehicule;
+    private Lieu actuel;
 
-    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature, Tenue tenue, Vehicules vehicule){
+    public Utilisateur(String nom, float argent, int pv, ArrayList<Stockables> inventaire, int faim, int temperature, Tenue tenue, Vehicules vehicule, Lieu lieu){
         this.nom = nom;
         this.argent = argent;
         this.pv = pv;
@@ -23,8 +26,12 @@ public class Utilisateur {
         this.temperature = temperature;
         this.tenue = tenue;
         this.vehicule = vehicule;
+        this.actuel = lieu;
     }
 
+    public Lieu getLieuActuel(){
+        return this.actuel;
+    }
     public String getNom(){
         return this.nom;
     }
@@ -50,6 +57,9 @@ public class Utilisateur {
         return this.vehicule;
     }
 
+    public void setLieuActuel(Lieu lieu){
+        this.actuel = lieu;
+    }
     public void setNom(String nom){
         this.nom = nom;
     }
@@ -137,36 +147,83 @@ public class Utilisateur {
         this.inventaire.remove(nourriture);
     }
 
-    public int equiperVetement(Vetement vetement){
+    public boolean equiperVetement(Vetement vetement){
         if(vetement.getType() == TYPE_VETEMENT.Tete){
             if(this.tenue.getTete().equals(vetement)){
-                return 0;
+                return false;
             }
             else{
                 this.tenue.setTete(vetement);
-                return 1;
+                return true;
             }
         }
         else if(vetement.getType() == TYPE_VETEMENT.Haut){
             if(this.tenue.getHaut().equals(vetement)){
-                return 0;
+                return false;
             }
             else{
                 this.tenue.setHaut(vetement);
-                return 1;
+                return true;
             }
         }
         else if(vetement.getType() == TYPE_VETEMENT.Bas){
             if(this.tenue.getBas().equals(vetement)){
-                return 0;
+                return false;
             }
             else{
                 this.tenue.setBas(vetement);
-                return 1;
+                return true;
             }
         }
         else{
-            return 0;
+            return false;
         }
+    }
+
+    public boolean equiperVehicule(Vehicules vehicule){
+        if(this.vehicule.getNom() == vehicule.getNom() && this.vehicule.getPrix() == vehicule.getPrix() && this.vehicule.getType() == vehicule.getType() && this.vehicule.getVitesse() == vehicule.getVitesse()){
+            return false;
+        }
+        this.vehicule.setNom(vehicule.getNom());
+        this.vehicule.setType(vehicule.getType());
+        this.vehicule.setPrix(vehicule.getPrix());
+        this.vehicule.setVitesse(vehicule.getVitesse());
+        return true;
+    }
+
+    public boolean equiper(Stockables stockable){
+        boolean verif;
+        if(stockable instanceof Nourriture){
+            manger((Nourriture)stockable);
+            return true;
+        }
+        else if(stockable instanceof Vetement){
+            verif = equiperVetement((Vetement)stockable);
+        }
+        else{
+            verif = equiperVehicule((Vehicules)stockable);
+        }
+        return verif;
+    }
+
+    public void afficherInventaire(){
+        int compteur=1;
+        System.out.println("Inventaire (" + this.inventaire.size() + " éléments) : ");
+        for(Stockables stockable : this.inventaire){
+            System.out.println(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
+            compteur++;
+        }
+    }
+
+    public void afficherProfil(){
+        System.out.println("Pseudo : " + this.nom);
+        System.out.println("Lieu : " + this.actuel.getNom());
+        System.out.println("Argent : " + this.argent);
+        System.out.println("Faim : " + this.faim + "%");
+        System.out.println("Vehicule : " + this.vehicule.getNom());
+        System.out.println("Tenue : ");
+        System.out.println("-> Haut : " + this.tenue.getHaut().getNom());
+        System.out.println("-> Bas : " + this.tenue.getBas().getNom());
+        System.out.println("-> Tete : " + this.tenue.getTete().getNom());
     }
 }
