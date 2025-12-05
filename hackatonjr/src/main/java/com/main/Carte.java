@@ -26,7 +26,7 @@ public class Carte {
     public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee, ModeTransport modeTransport) {
         // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
         if (modeTransport == ModeTransport.PILIER) {
-            //mode pilier : on peut aller directement au lieu d'arrivée
+            // mode pilier : on peut aller directement au lieu d'arrivée
             ArrayList<Lieu> cheminsFinal = new ArrayList<Lieu>();
             cheminsFinal.add(depart);
             cheminsFinal.add(arrivee);
@@ -86,6 +86,39 @@ public class Carte {
         }
 
         return cheminFinal;
+    }
+
+    public float totalDistanceChemin(ArrayList<Lieu> cheminLieux, ModeTransport modeTransport) {
+        float totalDistance = 0f;
+        if (modeTransport == ModeTransport.PILIER) {
+            return Coordonnees.distance(cheminLieux.get(0).getCoordonnees(),
+                    cheminLieux.get(cheminLieux.size() - 1).getCoordonnees());
+        }
+        for (int i = 0; i < cheminLieux.size() - 1; i++) {
+            Lieu actuel = cheminLieux.get(i);
+            Lieu suivant = cheminLieux.get(i + 1);
+            // Trouver le chemin entre les deux lieux
+            for (Chemin c : actuel.getChemins()) {
+                if (c.getAutre(actuel).equals(suivant)) {
+                    totalDistance += c.getDistance();
+                    break;
+                }
+            }
+        }
+        return totalDistance;
+    }
+
+    public ArrayList<Lieu> plusCourtCheminAvecEtape(Lieu depart, Lieu etape, Lieu arrivee,
+            ModeTransport modeTransport) {
+        ArrayList<Lieu> premierSegment = plusCourtChemin(depart, etape, modeTransport);
+        ArrayList<Lieu> deuxiemeSegment = plusCourtChemin(etape, arrivee, modeTransport);
+        if (premierSegment.isEmpty() || deuxiemeSegment.isEmpty()) {
+            return new ArrayList<>(); // Aucun chemin trouvé
+        }
+        // Fusionner les deux segments en évitant de dupliquer l'étape
+        premierSegment.remove(premierSegment.size() - 1); // Retirer l'étape du premier segment
+        premierSegment.addAll(deuxiemeSegment); // Ajouter le deuxième segment
+        return premierSegment;
     }
 
     public ArrayList<Lieu> init_liste_lieux() {
