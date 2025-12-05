@@ -1,7 +1,7 @@
 package com.main;
 
 enum ModeTransport {
-    VOITURE, NUAGE, TOUS
+    VOITURE, NUAGE, TOUS, PILIER
 }
 
 public class Chemin {
