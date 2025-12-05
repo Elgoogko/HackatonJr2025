@@ -103,16 +103,15 @@ public class Test {
 
         List<Lieu> tousLesLieux = List.of(village, plateau, lac);
         Lieu cible = tousLesLieux.get( (int)(Math.random() * tousLesLieux.size()));
-        // Évènement DANGER : Freezer arrive après 30 s dans 3 zones
+        // Évènement DANGER : Freezer arrive après 30 s dans 1 zone
         gestionnaire.ajouter(Evenement.danger(
                 30,
                 "Freezer",
                 "Freezer débarque sur Namek et commence à raser des villages.",
-                List.of(cible)  // ici Freezer vise les 3, à toi de choisir
+                List.of(cible)
         ));
 
-        // Timer de partie (en secondes) : pour tester, on met 90 s.
-        // Quand tu seras prêt, tu mets : int dureePartieSec = 10 * 60;
+        // Timer de partie (en secondes)
         int dureePartieSec = 90;
         long start = System.currentTimeMillis();
 
@@ -125,11 +124,10 @@ public class Test {
             int tempsRestant = dureePartieSec - tempsEcouleSec;
 
             if (tempsRestant <= 0) {
-                System.out.println("⏰ Temps écoulé, la partie est terminée !");
+                System.out.println("Temps écoulé, la partie est terminée !");
                 break;
             }
 
-            // Mise à jour des évènements (HISTOIRE / DANGER)
             gestionnaire.update(tempsEcouleSec, positionJoueur);
 
             System.out.println("\n===== MENU PRINCIPAL =====");
@@ -151,7 +149,6 @@ public class Test {
             switch (choix) {
 
                 case 1:
-                    // ======= SOUS-MENU BOUTIQUE (TON CODE, LÉGÈREMENT DÉPLACÉ) =======
                     int choixBoutique = -1;
                     while (choixBoutique != 0) {
                         System.out.println("\n=== MENU BOUTIQUE ===");
@@ -197,7 +194,6 @@ public class Test {
                     break;
 
                 case 2:
-                    // ======= DÉPLACEMENT ENTRE LES LIEUX (SIMPLE) =======
                     System.out.println("\n=== LIEUX DISPONIBLES ===");
                     afficherLieuChoix(village);
                     afficherLieuChoix(lac);
