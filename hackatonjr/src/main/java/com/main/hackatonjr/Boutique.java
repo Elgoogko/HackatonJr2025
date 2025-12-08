@@ -12,18 +12,20 @@ public class Boutique {
     private ArrayList<Stockables> stock;
     private ArrayList<Stockables> panier;
     private Utilisateur utilisateur;
+    private int dernierId;
 
     public Boutique(Utilisateur utilisateur) {
         this.stock = new ArrayList<>();
-        this.stock.add(new Capsule(10000.0f, Couleur.BLEU, "Capsule bleu"));
-        this.stock.add(new Capsule(10000.0f, Couleur.ROUGE, "Capsule rouge"));
-        this.stock.add(new Capsule(10000.0f, Couleur.VERT, "Capsule vert"));
+        this.stock.add(new Capsule(-10,10000.0f, Couleur.BLEU, "Capsule bleu"));
+        this.stock.add(new Capsule(-11,10000.0f, Couleur.ROUGE, "Capsule rouge"));
+        this.stock.add(new Capsule(-12,10000.0f, Couleur.VERT, "Capsule vert"));
         Catalogue catalogue = new Catalogue();
         this.stock.addAll(catalogue.Vetements);
         this.stock.addAll(catalogue.Nourritures);
         this.stock.addAll(catalogue.Vehicules);
         this.panier = new ArrayList<>();
         this.utilisateur = utilisateur;
+        this.dernierId = this.stock.size()+1;
         return;
     }
 
@@ -44,14 +46,22 @@ public class Boutique {
             Catalogue catalogue = new Catalogue();
 
             if(((Capsule)sto).getCouleur() == Couleur.BLEU){
-                this.utilisateur.ajoutElement(catalogue.Vetements.get(ThreadLocalRandom.current().nextInt(catalogue.Vetements.size())));
+                Vetement vetement = catalogue.Vetements.get(ThreadLocalRandom.current().nextInt(catalogue.Vetements.size()));
+                vetement.setId(this.dernierId);
+                this.utilisateur.ajoutElement(vetement);
             }
             else if(((Capsule)sto).getCouleur() == Couleur.ROUGE){
-                this.utilisateur.ajoutElement(catalogue.Vehicules.get(ThreadLocalRandom.current().nextInt(catalogue.Vehicules.size())));
+                Vehicules vehicule = catalogue.Vehicules.get(ThreadLocalRandom.current().nextInt(catalogue.Vehicules.size()));
+                vehicule.setId(this.dernierId);
+                this.utilisateur.ajoutElement(vehicule);
             }
             else{
-                this.utilisateur.ajoutElement(catalogue.Nourritures.get(ThreadLocalRandom.current().nextInt(catalogue.Nourritures.size())));
+                Nourriture nourriture = catalogue.Nourritures.get(ThreadLocalRandom.current().nextInt(catalogue.Nourritures.size()));
+                nourriture.setId(this.dernierId);
+                this.utilisateur.ajoutElement(nourriture);
             }
+
+            this.dernierId++;
         }
         else{
             this.utilisateur.ajoutElement(sto);
@@ -76,13 +86,12 @@ public class Boutique {
 
     public void ajouterPanier(Stockables sto) {
         this.panier.add(sto);
-        this.stock.remove(sto);
         return;
     }
 
     public float getPrixPanier() {
         float prix = 0;
-        for (Stockables elem : stock) {
+        for (Stockables elem : panier) {
             prix += elem.getPrix();
         }
         return prix;
@@ -131,6 +140,16 @@ public class Boutique {
 
     public void viderPanier(){
         this.panier = new ArrayList<Stockables>();
+    }
+
+    public boolean estDansPanier(Stockables stockable){
+        int i=0;
+        for(i=0;i<this.panier.size();i++){
+            if(this.panier.get(i).equals(stockable)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

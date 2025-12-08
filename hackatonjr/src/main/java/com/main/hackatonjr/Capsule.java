@@ -7,8 +7,8 @@ public class Capsule extends Stockables{
     
     private Couleur couleur;
 
-    public Capsule(float prix, Couleur couleur, String nom) {
-        super(nom, prix);
+    public Capsule(int id, float prix, Couleur couleur, String nom) {
+        super(id, nom, prix);
         this.couleur = couleur;
     }
 

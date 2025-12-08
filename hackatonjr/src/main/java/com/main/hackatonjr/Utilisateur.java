@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.main.*;
+import com.main.hackatonjr.*;
 
 public class Utilisateur {
     private String nom;
@@ -181,9 +181,10 @@ public class Utilisateur {
     }
 
     public boolean equiperVehicule(Vehicules vehicule){
-        if(this.vehicule.getNom() == vehicule.getNom() && this.vehicule.getPrix() == vehicule.getPrix() && this.vehicule.getType() == vehicule.getType() && this.vehicule.getVitesse() == vehicule.getVitesse()){
+        if(this.vehicule.equals(vehicule)){
             return false;
         }
+        this.vehicule.setId(vehicule.getId());
         this.vehicule.setNom(vehicule.getNom());
         this.vehicule.setType(vehicule.getType());
         this.vehicule.setPrix(vehicule.getPrix());
@@ -206,11 +207,35 @@ public class Utilisateur {
         return verif;
     }
 
+    public boolean estEquipe(Stockables stockable){
+        if(stockable instanceof Vetement){
+            Vetement vetement = (Vetement)stockable;
+            if((vetement.getType() == TYPE_VETEMENT.Haut && this.getTenue().getHaut().equals(vetement))
+            || (vetement.getType() == TYPE_VETEMENT.Bas && this.getTenue().getBas().equals(vetement))
+            || (vetement.getType() == TYPE_VETEMENT.Tete && this.getTenue().getTete().equals(vetement))){
+                return true;
+            }
+        }
+        else if(stockable instanceof Vehicules){
+            Vehicules vehicule = (Vehicules)stockable;
+            if(this.getVehicules().equals(vehicule)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void afficherInventaire(){
         int compteur=1;
         System.out.println("Inventaire (" + this.inventaire.size() + " éléments) : ");
         for(Stockables stockable : this.inventaire){
-            System.out.println(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
+            System.out.print(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
+            if(this.estEquipe(stockable) == true){
+                System.out.println(" (Equipé)");
+            }
+            else{
+                System.out.print("\n");
+            }
             compteur++;
         }
     }

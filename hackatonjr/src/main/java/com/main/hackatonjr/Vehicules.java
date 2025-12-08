@@ -8,8 +8,8 @@ public class Vehicules extends Stockables {
     private float vitesse;
     private TYPE type;
 
-    public Vehicules(float vitesse, String nom, TYPE type, float prix) {
-        super(nom, prix);
+    public Vehicules(int id, float vitesse, String nom, TYPE type, float prix) {
+        super(id, nom, prix);
         this.vitesse = vitesse;
         this.type = type;
     }
@@ -35,5 +35,16 @@ public class Vehicules extends Stockables {
 
     public void setType(TYPE type) {
         this.type = type;
+    }
+
+    @Override 
+    public boolean equals(Object obj){
+        if(obj instanceof Vehicules){
+            Vehicules vehicules = (Vehicules) obj;
+            if(vehicules.getId() == this.getId() && vehicules.getNom().equals(this.getNom()) && vehicules.getPrix() == this.getPrix() && vehicules.getType() == this.type && vehicules.getVitesse() == this.vitesse){
+                return true;
+            }
+        }
+        return false;
     }
 }

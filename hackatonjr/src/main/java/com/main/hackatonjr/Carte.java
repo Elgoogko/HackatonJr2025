@@ -18,11 +18,11 @@ public class Carte {
         init_liste_lieux();
     }
 
-    public List<Lieu> getLieux() {
+    public ArrayList<Lieu> getLieux() {
         return lieux;
     }
 
-    public List<Chemin> getChemins() {
+    public ArrayList<Chemin> getChemins() {
         return chemins;
     }
 
