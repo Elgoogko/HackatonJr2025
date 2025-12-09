@@ -3,8 +3,6 @@ import com.main.hackatonjr.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.boot.SpringApplication;
@@ -12,11 +10,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Runner {
+    public int choix(Scanner sc){
+        String chaine = sc.nextLine();
+        if(chaine == null || chaine.isEmpty()){
+            return -1;
+        }
+        try{
+            return Integer.parseInt(chaine);
+        }
+        catch(NumberFormatException e){
+            return -1;
+        }        
+    }
+
     public void start() {
 
         Scanner sc = new Scanner(System.in);
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
 
         Carte carte = new Carte();
 
@@ -36,7 +45,7 @@ public class Runner {
         do{
             System.out.print("Donnez votre pseudo (Maximum 10 caractères) : ");
             utilisateur.setNom(sc.nextLine());
-        }while(utilisateur.getNom().length() > 10 || utilisateur.getNom() == "");
+        }while(utilisateur.getNom() == null || utilisateur.getNom().length() > 10 || utilisateur.getNom().length() <= 0);
 
         System.out.println("\n=== BIENVENUE " + utilisateur.getNom() + " ===");
         System.out.println("Votre personnage porte une tenue composé de " + utilisateur.getTenue().getBas().getNom() + ", " + utilisateur.getTenue().getHaut().getNom() + " et " + utilisateur.getTenue().getTete().getNom());
@@ -44,7 +53,7 @@ public class Runner {
         System.out.println("Vous commencez avec " + utilisateur.getArgent() + " zénis");
 
         Boutique boutique = new Boutique(utilisateur);
-        int choix = -1, choix2 = -1, choix3 = -1, choix4 = -1, choix5 = -1, choix6 = -1, choix7 = -1, choix8 = -1, indice = -1, indice2 = -1, reponse = -1, taille = 0;
+        int choix = -1, choix2 = -1, choix3 = -1, choix4 = -1, choix5 = -1, choix6 = -1, choix7 = -1, indice = -1, indice2 = -1, reponse = -1, taille = 0;
         boolean verif;
         String nomEquipement;
 
@@ -63,7 +72,7 @@ public class Runner {
 
             do{
                 System.out.print("Votre choix : ");
-                choix = Integer.parseInt(sc.nextLine());
+                choix = choix(sc);
                 switch (choix) {
                     case 1:
                         System.out.println("\n=== INVENTAIRE ===");
@@ -74,8 +83,8 @@ public class Runner {
 
                         do{
                             System.out.print("Votre choix : ");
-
-                            choix2 = Integer.parseInt(sc.nextLine());
+                            choix2 = choix(sc);
+                            
                             switch(choix2){
                                 case 1:
                                     if(utilisateur.getInventaire().size() <= 0){
@@ -84,7 +93,7 @@ public class Runner {
                                     else{
                                         do{
                                             System.out.print("Donner le numéro de l'élément à équiper : ");
-                                            indice = Integer.parseInt(sc.nextLine());
+                                            indice = choix(sc);
                                             taille = utilisateur.getInventaire().size();
                                         }while(indice < 1 || indice > utilisateur.getInventaire().size());
                                         nomEquipement = utilisateur.getInventaire().get(indice - 1).getNom();
@@ -130,7 +139,7 @@ public class Runner {
                             System.out.println("0 - Quitter");
                             System.out.print("Votre choix : ");
 
-                            choix3 = Integer.parseInt(sc.nextLine());
+                            choix3 = choix(sc);
                             switch (choix3) {
                                 case 1:
                                     boutique.trierStock(ModeTris.PRIX_CROISSANT);
@@ -147,19 +156,19 @@ public class Runner {
                                 case 5:
                                     do{
                                         System.out.print("Donner le numéro de l'élément à acheter : ");
-                                        indice = Integer.parseInt(sc.nextLine());
+                                        indice = choix(sc);
                                     }while(indice<1 || indice>boutique.getStock().size());
                                     boutique.ajouterPanier(boutique.getStock().get(indice-1));
 
                                     do{
                                         do{
                                             System.out.print("Voulez-vous rajouter un élément ? (1 : Oui / 0 : Non) : ");
-                                            reponse = Integer.parseInt(sc.nextLine());
+                                            reponse = choix(sc);
                                         }while(reponse != 1 && reponse != 0);
                                         if(reponse == 1){
                                             do{
                                                 System.out.print("Donner le numéro de l'élément à rajouter au panier : ");
-                                                indice = Integer.parseInt(sc.nextLine());
+                                                indice = choix(sc);
                                             }while(indice<1 || indice>boutique.getStock().size() || (!(boutique.getStock().get(indice-1) instanceof Capsule) && boutique.estDansPanier(boutique.getStock().get(indice-1))));
                                             boutique.ajouterPanier(boutique.getStock().get(indice-1));
                                         }
@@ -195,7 +204,7 @@ public class Runner {
                         do{
                             System.out.print("Votre choix : ");
 
-                            choix4 = Integer.parseInt(sc.nextLine());
+                            choix4 = choix(sc);
                             switch(choix4){
                                 case 1:
                                     choix = -1;
@@ -219,7 +228,7 @@ public class Runner {
                         do{
                             System.out.print("Votre choix : ");
 
-                            choix5 = Integer.parseInt(sc.nextLine());
+                            choix5 = choix(sc);
                             switch(choix5){
                                 case 1:
                                     choix = -1;
@@ -230,11 +239,11 @@ public class Runner {
                                 case 2:
                                     do{
                                         System.out.print("Donnez le numéro du lieu sur lequel vous voulez aller : ");
-                                        indice = Integer.parseInt(sc.nextLine());
+                                        indice = choix(sc);
                                     }while(indice < 1 || indice > carte.getLieux().size());
                                     do{
                                         System.out.print("Voulez-vous passer par un lieu spécifique ? (1 : Oui / 0 : Non) : ");
-                                        choix6 = Integer.parseInt(sc.nextLine());
+                                        choix6 = choix(sc);
                                     }while(choix6 != 0 && choix6 != 1);
                                     if(utilisateur.getVehicules().getType() == TYPE.Voiture){
                                         transport = ModeTransport.VOITURE;
@@ -252,7 +261,7 @@ public class Runner {
                                     if(choix6 == 1){
                                         do{
                                             System.out.print("Donnez le numéro du lieu par lequel vous voulez passer : ");
-                                            indice2 = Integer.parseInt(sc.nextLine());
+                                            indice2 = choix(sc);
                                         }while(indice2 < 1 || indice2 > carte.getLieux().size());
                                         lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), transport);
                                     }
@@ -297,7 +306,7 @@ public class Runner {
                             }
                             do{
                                 System.out.print("\nVous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
-                                choix7 = Integer.parseInt(sc.nextLine());
+                                choix7 = choix(sc);
                             }while(choix7 != 0 && choix7 != 1);
 
                             if(choix7 == 0){
@@ -308,7 +317,7 @@ public class Runner {
                                     carte.afficherLieux();
                                     carte.afficher10Lieux(utilisateur);
                                     System.out.print("Donnez le numéro du lieu où vous voulez fuir : ");
-                                    indice = Integer.parseInt(sc.nextLine());
+                                    indice = choix(sc);
                                 }while(indice < 1 || indice > carte.getLieux().size());
 
                                 verif = true;

@@ -229,21 +229,21 @@ public class Carte {
     }
 
     public void afficher10Lieux(Utilisateur utilisateur){
-        System.out.println("\n" + afficherId(this.lieux.get(0).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(1).getId(),utilisateur) + " <--------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
-        System.out.println("A           / A             A");
-        System.out.println("|          /  |\t            |");
-        System.out.println("|         /   |             V");
-        System.out.println("|        /    |             " + afficherId(this.lieux.get(8).getId(),utilisateur));
-        System.out.println("|       /     |\t      \t    A");
-        System.out.println("|      /      |\t\t    |");
-        System.out.println("|     /       |             V");
-        System.out.println("|    /\t      |\t\t    " + afficherId(this.lieux.get(7).getId(),utilisateur));
-        System.out.println("|   /\t      |\t\t    A");
-        System.out.println("|  /\t      |\t\t    |");
-        System.out.println("V /           V             V");
-        System.out.println(afficherId(this.lieux.get(2).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(6).getId(),utilisateur));
-        System.out.println("A                           A");
-        System.out.println("|                           |");
-        System.out.println("|___________________________|\n");
+        System.out.println("\n " + afficherId(this.lieux.get(0).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(1).getId(),utilisateur) + " <--------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
+        System.out.println(" ^           / ^             ^");
+        System.out.println(" |          /  |             |");
+        System.out.println(" |         /   |             v");
+        System.out.println(" |        /    |             " + afficherId(this.lieux.get(8).getId(),utilisateur));
+        System.out.println(" |       /     |             ^");
+        System.out.println(" |      /      |             |");
+        System.out.println(" |     /       |             v");
+        System.out.println(" |    /        |             " + afficherId(this.lieux.get(7).getId(),utilisateur));
+        System.out.println(" |   /         |             ^");
+        System.out.println(" |  /          |             |");
+        System.out.println(" v /           v             v");
+        System.out.println(" " + afficherId(this.lieux.get(2).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(6).getId(),utilisateur));
+        System.out.println(" ^                           ^");
+        System.out.println(" |                           |");
+        System.out.println(" |___________________________|\n");
     }
 }
