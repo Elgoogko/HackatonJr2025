@@ -211,7 +211,7 @@ public class Runner {
                     case 4:
                         System.out.println("\n=== Carte ===");
                         carte.afficherLieux();
-                        carte.afficherChemins();
+                        carte.afficher10Lieux(utilisateur);
                         System.out.println("1 - Retour");
                         System.out.println("2 - Deplacement");
                         System.out.println("0 - Quitter");
@@ -281,7 +281,7 @@ public class Runner {
                     case 5:
                         System.out.println("\n=== EVENEMENT ===");
                         if(ThreadLocalRandom.current().nextInt(0,2) == 0 || events.getDangers().size() <= 0){
-                            System.out.println("[HISTOIRE] " + events.getHistoires().get(0).getDescription());
+                            System.out.println("\u001B[32m" + "[HISTOIRE] " + events.getHistoires().get(0).getDescription() + "\u001B[0m");
                             events.getHistoires().remove(0);
                             if(events.getHistoires().size() <= 0){
                                 System.out.println("\nVOUS AVEZ SURVECU !!!\n\n");
@@ -290,13 +290,13 @@ public class Runner {
                             break;
                         }
                         else{
-                            System.out.println("[DANGER] " + events.getDangers().get(0).getDescription());
+                            System.out.println("\u001B[31m" + "[DANGER] " + events.getDangers().get(0).getDescription() + "\u001B[0m");
                             System.out.print("Lieux touchés : ");
                             for(Lieu l : events.getDangers().get(0).getLieuxCibles()){
                                 System.out.print(l.getNom() + ", ");
                             }
                             do{
-                                System.out.print("\nVoulez-vous fuir ? (1 : Oui / 0 : Non) : ");
+                                System.out.print("\nVous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
                                 choix7 = Integer.parseInt(sc.nextLine());
                             }while(choix7 != 0 && choix7 != 1);
 
@@ -305,6 +305,8 @@ public class Runner {
                             }
                             else{
                                 do{
+                                    carte.afficherLieux();
+                                    carte.afficher10Lieux(utilisateur);
                                     System.out.print("Donnez le numéro du lieu où vous voulez fuir : ");
                                     indice = Integer.parseInt(sc.nextLine());
                                 }while(indice < 1 || indice > carte.getLieux().size());

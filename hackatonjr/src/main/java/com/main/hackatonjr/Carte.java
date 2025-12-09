@@ -214,4 +214,36 @@ public class Carte {
             compteur++;
         }
     }
+
+    public String afficherId(int id,Utilisateur utilisateur){
+        int nombre = id+1;
+        if(id == utilisateur.getLieuActuel().getId()){
+            return ("\u001B[32m" + nombre + "\u001B[0m");
+        }
+        else if(this.lieux.get(id).estCondamne() == true){
+            return ("\u001B[31m" + nombre + "\u001B[0m");
+        }
+        else{
+            return ("\u001B[33m" + nombre + "\u001B[0m");
+        }
+    }
+
+    public void afficher10Lieux(Utilisateur utilisateur){
+        System.out.println("\n" + afficherId(this.lieux.get(0).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(1).getId(),utilisateur) + " <--------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
+        System.out.println("A           / A             A");
+        System.out.println("|          /  |\t            |");
+        System.out.println("|         /   |             V");
+        System.out.println("|        /    |             " + afficherId(this.lieux.get(8).getId(),utilisateur));
+        System.out.println("|       /     |\t      \t    A");
+        System.out.println("|      /      |\t\t    |");
+        System.out.println("|     /       |             V");
+        System.out.println("|    /\t      |\t\t    " + afficherId(this.lieux.get(7).getId(),utilisateur));
+        System.out.println("|   /\t      |\t\t    A");
+        System.out.println("|  /\t      |\t\t    |");
+        System.out.println("V /           V             V");
+        System.out.println(afficherId(this.lieux.get(2).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(6).getId(),utilisateur));
+        System.out.println("A                           A");
+        System.out.println("|                           |");
+        System.out.println("|___________________________|\n");
+    }
 }
