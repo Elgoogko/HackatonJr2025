@@ -44,7 +44,7 @@ public class Utilisateur {
     public ArrayList<Stockables> getInventaire(){
         return this.inventaire;
     }
-    public float getFaim(){
+    public int getFaim(){
         return this.faim;
     }
     public float getTemperature(){
@@ -88,6 +88,10 @@ public class Utilisateur {
         this.vehicule.setPrix(vehicule.getPrix());
         this.vehicule.setVitesse(vehicule.getVitesse());
         this.vehicule.setType(vehicule.getType());
+    }
+
+    public void ajouterArgent(float argent){
+        this.argent += argent;
     }
 
     public boolean retirerArgent(float prix){
@@ -143,7 +147,7 @@ public class Utilisateur {
     }
 
     public void manger(Nourriture nourriture){
-        ajouterFaim(nourriture.getRenduFaim());
+        reduireFaim(nourriture.getRenduFaim());
         this.inventaire.remove(nourriture);
     }
 
@@ -227,11 +231,10 @@ public class Utilisateur {
 
     public void afficherInventaire(){
         int compteur=1;
-        System.out.println("Inventaire (" + this.inventaire.size() + " éléments) : ");
         for(Stockables stockable : this.inventaire){
             System.out.print(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
             if(this.estEquipe(stockable) == true){
-                System.out.println(" (Equipé)");
+                System.out.println("\u001B[96m" + " (Equipé)" + "\u001B[0m");
             }
             else{
                 System.out.print("\n");
@@ -241,14 +244,14 @@ public class Utilisateur {
     }
 
     public void afficherProfil(){
-        System.out.println("Pseudo : " + this.nom);
-        System.out.println("Lieu : " + this.actuel.getNom());
-        System.out.println("Argent : " + this.argent);
-        System.out.println("Faim : " + this.faim + "%");
-        System.out.println("Vehicule : " + this.vehicule.getNom());
-        System.out.println("Tenue : ");
-        System.out.println("-> Haut : " + this.tenue.getHaut().getNom());
-        System.out.println("-> Bas : " + this.tenue.getBas().getNom());
-        System.out.println("-> Tete : " + this.tenue.getTete().getNom());
+        System.out.println("- Pseudo : " + "\u001B[96m" + this.nom + "\u001B[0m");
+        System.out.println("- Lieu : " + "\u001B[96m" + this.actuel.getNom() + "\u001B[0m");
+        System.out.println("- Argent : " + "\u001B[96m" + this.argent + "\u001B[0m");
+        System.out.println("- Faim : " + "\u001B[96m" + this.faim + "%" + "\u001B[0m");
+        System.out.println("- Vehicule : " + "\u001B[96m" + this.vehicule.getNom() + "\u001B[0m");
+        System.out.println("- Tenue : ");
+        System.out.println("--- Haut : " + "\u001B[96m" + this.tenue.getHaut().getNom() + "\u001B[0m");
+        System.out.println("--- Bas : " + "\u001B[96m" + this.tenue.getBas().getNom() + "\u001B[0m");
+        System.out.println("--- Tete : " + "\u001B[96m" + this.tenue.getTete().getNom() + "\u001B[0m");
     }
 }

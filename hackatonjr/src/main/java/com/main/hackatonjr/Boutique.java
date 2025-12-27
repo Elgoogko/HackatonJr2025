@@ -131,7 +131,6 @@ public class Boutique {
 
     public void afficherBoutique(){
         int compteur=1;
-        System.out.println("Boutique (" + this.stock.size() + " éléments) : ");
         for(Stockables stockable : this.stock){
             System.out.println(compteur + ". " + stockable.getNom()  + " " + stockable.getPrix() + " zénis");
             compteur++;

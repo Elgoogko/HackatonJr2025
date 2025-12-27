@@ -31,6 +31,9 @@ public class Carte {
         if (modeTransport == ModeTransport.PILIER) {
             // mode pilier : on peut aller directement au lieu d'arrivée
             ArrayList<Lieu> cheminsFinal = new ArrayList<Lieu>();
+            if(arrivee.estCondamne()){
+                return cheminsFinal;
+            }
             cheminsFinal.add(depart);
             cheminsFinal.add(arrivee);
             return cheminsFinal;
@@ -187,63 +190,98 @@ public class Carte {
         return lieux;
     }
 
-    public void afficherLieux(){
-        int compteur=1;
-        System.out.println("Lieux (" + this.lieux.size() + " éléments) : ");
-        for(Lieu lieu : this.lieux){
-            System.out.println(compteur + ". " + lieu.getNom());
-            compteur++;
+    public String returnNomLieu(Lieu lieu, Utilisateur utilisateur){
+        if(lieu.getId() == utilisateur.getLieuActuel().getId()){
+            return ("\u001B[1m" + "\u001B[32m" + lieu.getNom() + "\u001B[0m" + "\u001B[96m");
         }
-    }
-
-    public void afficherChemins(){
-        int compteur=1;
-        System.out.println("\nChemins : ");
-        for(Lieu lieu : this.lieux){
-            ArrayList<Chemin> chemins = lieu.getChemins();
-            System.out.println(compteur + ". " + lieu.getNom());
-            for(Chemin c : chemins){
-                if(c.getLieuA() == lieu){
-                    System.out.println("## " + c.getLieuA().getNom() + " --> " + c.getLieuB().getNom());
-                }
-                else{
-                    System.out.println("## " + c.getLieuB().getNom() + " --> " + c.getLieuA().getNom());
-                }
-            }
-            System.out.print("\n");
-            compteur++;
-        }
-    }
-
-    public String afficherId(int id,Utilisateur utilisateur){
-        int nombre = id+1;
-        if(id == utilisateur.getLieuActuel().getId()){
-            return ("\u001B[32m" + nombre + "\u001B[0m");
-        }
-        else if(this.lieux.get(id).estCondamne() == true){
-            return ("\u001B[31m" + nombre + "\u001B[0m");
+        else if(lieu.estCondamne() == true){
+            return ("\u001B[1m" + "\u001B[31m" + lieu.getNom() + "\u001B[0m" + "\u001B[96m");
         }
         else{
-            return ("\u001B[33m" + nombre + "\u001B[0m");
+            return ("\u001B[97m" + lieu.getNom() + "\u001B[96m");
+        }
+    }
+
+    public void afficherLieux(Utilisateur utilisateur){
+        int compteur=1;
+        System.out.println("\n-> Lieux (" + this.lieux.size() + ") : \n" + "\u001B[96m");
+        for(Lieu lieu : this.lieux){
+            System.out.println(compteur + ". " + returnNomLieu(lieu,utilisateur));
+            compteur++;
+        }
+        System.out.print("\u001B[0m");
+    }
+
+    public void afficherChemins(Utilisateur utilisateur){
+        //Affiche tous les chemins
+        /*
+        int compteur=1;
+        for(Lieu lieu : this.lieux){
+            ArrayList<Chemin> chemins = lieu.getChemins();
+            System.out.println("\u001B[96m" + compteur + ". " + "\u001B[0m" + returnNomLieu(lieu,utilisateur));
+            for(Chemin c : chemins){
+                if(c.getLieuA() == lieu){
+                    System.out.println(" ---> " + returnNomLieu(c.getLieuB(),utilisateur) + " (" + c.getModeTransportOk() + ")");
+                }
+                else{
+                    System.out.println(" ---> " + returnNomLieu(c.getLieuA(),utilisateur));
+                }
+            }
+            System.out.print("\n" + "\u001B[0m");
+            compteur++;
+        }
+        */
+
+        System.out.println("\n-> Chemins : \n");
+        System.out.println("\u001B[96m" + (utilisateur.getLieuActuel().getId() + 1) + ". " + "\u001B[0m" + returnNomLieu(utilisateur.getLieuActuel(),utilisateur));
+        for(Lieu l : this.lieux){
+            if(l != utilisateur.getLieuActuel() && !l.estCondamne()){
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.TOUS).isEmpty()){
+                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Tous)");
+                }
+                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.PILIER).isEmpty()){
+                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Pilier)");
+                }
+                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.NUAGE).isEmpty()){
+                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Nuage)");
+                }
+                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.VOITURE).isEmpty()){
+                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Voiture)");
+                }
+            }
+        }
+
+    }
+
+    public String afficherId(int id, Utilisateur utilisateur){
+        int nombre = id+1;
+        if(id == utilisateur.getLieuActuel().getId()){
+            return ("\u001B[1m" + "\u001B[6m" + "\u001B[32m" + nombre + "\u001B[0m" + "\u001B[96m");
+        }
+        else if(this.lieux.get(id).estCondamne() == true){
+            return ("\u001B[1m" + "\u001B[6m" + "\u001B[31m" + nombre + "\u001B[0m" + "\u001B[96m");
+        }
+        else{
+            return ("\u001B[97m" + nombre + "\u001B[96m");
         }
     }
 
     public void afficher10Lieux(Utilisateur utilisateur){
-        System.out.println("\n " + afficherId(this.lieux.get(0).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(1).getId(),utilisateur) + " <--------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
-        System.out.println(" ^           / ^             ^");
-        System.out.println(" |          /  |             |");
-        System.out.println(" |         /   |             v");
-        System.out.println(" |        /    |             " + afficherId(this.lieux.get(8).getId(),utilisateur));
-        System.out.println(" |       /     |             ^");
-        System.out.println(" |      /      |             |");
-        System.out.println(" |     /       |             v");
-        System.out.println(" |    /        |             " + afficherId(this.lieux.get(7).getId(),utilisateur));
-        System.out.println(" |   /         |             ^");
-        System.out.println(" |  /          |             |");
-        System.out.println(" v /           v             v");
-        System.out.println(" " + afficherId(this.lieux.get(2).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <--> " + afficherId(this.lieux.get(6).getId(),utilisateur));
-        System.out.println(" ^                           ^");
-        System.out.println(" |                           |");
-        System.out.println(" |___________________________|\n");
+        System.out.println("\n " + afficherId(this.lieux.get(0).getId(),utilisateur) + " <------------------------>  " + afficherId(this.lieux.get(1).getId(),utilisateur) + "  <-----------------------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
+        System.out.println(" ^                            ^ ^                           ^");
+        System.out.println(" |                       _____| |                           |");
+        System.out.println(" |                      |       |                           v");
+        System.out.println(" |                      |       |                           " + afficherId(this.lieux.get(8).getId(),utilisateur));
+        System.out.println(" |                      |       |                           ^");
+        System.out.println(" |                      |       |                           |");
+        System.out.println(" |                      |       |                           v");
+        System.out.println(" |                      |       |                           " + afficherId(this.lieux.get(7).getId(),utilisateur));
+        System.out.println(" |  ____________________|       |                           ^");
+        System.out.println(" | |                            |                           |");
+        System.out.println(" v v                            v                           v");
+        System.out.println("  " + afficherId(this.lieux.get(2).getId(),utilisateur) + " <----------> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <----------> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(6).getId(),utilisateur));
+        System.out.println(" ^                                                          ^");
+        System.out.println(" |                                                          |");
+        System.out.println(" |__________________________________________________________|" + "\u001B[0m");
     }
 }

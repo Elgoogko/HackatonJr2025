@@ -2,7 +2,7 @@ package com.main.hackatonjr;
 
 import com.main.hackatonjr.Stockables;
 
-enum TYPE{Voiture,Pilier,Nuage, Pieds};
+enum TYPE{Voiture,Pilier,Nuage,Pieds};
 
 public class Vehicules extends Stockables {
     private float vitesse;

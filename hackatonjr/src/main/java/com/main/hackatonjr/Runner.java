@@ -4,6 +4,8 @@ import com.main.hackatonjr.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,8 @@ public class Runner {
 
         Scanner sc = new Scanner(System.in);
 
+        Menu menu = new Menu();
+
         Carte carte = new Carte();
 
         Gestionnaire_Events events = new Gestionnaire_Events(carte);
@@ -36,57 +40,42 @@ public class Runner {
         Vetement tete = new Vetement(-3,0, TYPE_VETEMENT.Tete, "none", 0);
 
         Tenue tenue = new Tenue(haut, bas, tete);
-        Vehicules vehicule = new Vehicules(-1,20, "pieds", TYPE.Pieds, 0);
+        Vehicules vehicule = new Vehicules(-1,20, "Pieds", TYPE.Pieds, 0);
         Lieu lieu = carte.getLieux().get(0);
 
-        Utilisateur utilisateur = new Utilisateur("", 100000.0f, 100, new ArrayList<>(), 100, 20, tenue, vehicule, lieu);
-        
-        System.out.println("\n=== CREATION ===");
-        do{
-            System.out.print("Donnez votre pseudo (Maximum 10 caractères) : ");
-            utilisateur.setNom(sc.nextLine());
-        }while(utilisateur.getNom() == null || utilisateur.getNom().length() > 10 || utilisateur.getNom().length() <= 0);
-
-        System.out.println("\n=== BIENVENUE " + utilisateur.getNom() + " ===");
-        System.out.println("Votre personnage porte une tenue composé de " + utilisateur.getTenue().getBas().getNom() + ", " + utilisateur.getTenue().getHaut().getNom() + " et " + utilisateur.getTenue().getTete().getNom());
-        System.out.println("Votre personnage a comme véhicule : " + utilisateur.getVehicules().getNom());
-        System.out.println("Vous commencez avec " + utilisateur.getArgent() + " zénis");
+        Utilisateur utilisateur = new Utilisateur("", 100000.0f, 100, new ArrayList<>(), 0, 20, tenue, vehicule, lieu);
 
         Boutique boutique = new Boutique(utilisateur);
-        int choix = -1, choix2 = -1, choix3 = -1, choix4 = -1, choix5 = -1, choix6 = -1, choix7 = -1, indice = -1, indice2 = -1, reponse = -1, taille = 0;
+        int choix = -1, choix2 = -1, choix3 = -1, indice = -1, indice2 = -1, reponse = -1, taille = 0;
+        final int QUITTER = 0, RETOUR = 1, INVENTAIRE = 1, BOUTIQUE = 2, PROFIL = 3, CARTE = 4, EVENEMENT = 5, TRIPRIXCROISSANT = 2, TRIPRIXDECROISSANT = 3, TRINOMCROISSANT = 4, TRINOMDECROISSANT = 5, ACHETER = 6, EQUIPER = 2, DEPLACEMENT = 2, OUI = 1, NON = 0;
         boolean verif;
         String nomEquipement;
 
         ArrayList<Lieu> lieux = new ArrayList<Lieu>();
         ModeTransport transport = null;
 
-        while(choix != 0){
-            choix5 = -1;
-            System.out.println("\n=== MENU ===");
-            System.out.println("1 - Ouvrir l'inventaire");
-            System.out.println("2 - Ouvrir la boutique");
-            System.out.println("3 - Mon profil");
-            System.out.println("4 - Ouvrir la carte");
-            System.out.println("5 - Voir les evenements");
-            System.out.println("0 - Quitter");
+
+        menu.afficheCreation(utilisateur,sc);
+
+        menu.afficheBienvenue(utilisateur,sc);
+
+        while(utilisateur.getFaim()<100){
+            choix2 = -1;
+            menu.afficheMenu();
 
             do{
-                System.out.print("Votre choix : ");
+                System.out.print("--> Votre choix : ");
                 choix = choix(sc);
                 switch (choix) {
-                    case 1:
-                        System.out.println("\n=== INVENTAIRE ===");
-                        utilisateur.afficherInventaire();
-                        System.out.println("\n1 - Equiper");
-                        System.out.println("2 - Retour");
-                        System.out.println("0 - Quitter");
+                    case INVENTAIRE:
+                        menu.afficheInventaire(utilisateur);
 
                         do{
-                            System.out.print("Votre choix : ");
+                            System.out.print("--> Votre choix : ");
                             choix2 = choix(sc);
                             
                             switch(choix2){
-                                case 1:
+                                case EQUIPER:
                                     if(utilisateur.getInventaire().size() <= 0){
                                         System.out.println("Vous n'avez aucun élément à équiper !");
                                     }
@@ -112,48 +101,36 @@ public class Runner {
                                         }
                                     }
                                     break;
-                                case 2:
-                                    choix = -1;
+                                case RETOUR:
                                     break;
-                                case 0:
+                                case QUITTER:
                                     System.out.println("\nFin du programme...\n");
                                     return ;
-                                default:
-                                    System.out.println("Choix invalide");
                             }
-                        }while(choix2 != 0 && choix2 != 1 && choix2 != 2);
+                        }while(choix2 != RETOUR && choix2 != EQUIPER);
 
                         break;
-                    case 2:
+                    case BOUTIQUE:
 
                         do{
+                            menu.afficheBoutique(boutique);
 
-                            System.out.println("\n=== MENU BOUTIQUE ===\n");
-                            boutique.afficherBoutique();
-                            System.out.println("\n1 - Trier par prix croissant");
-                            System.out.println("2 - Trier par prix décroissant");
-                            System.out.println("3 - Trier par nom croissant (A->Z)");
-                            System.out.println("4 - Trier par nom décroissant (Z->A)");
-                            System.out.println("5 - Acheter un élément");
-                            System.out.println("6 - Retour");
-                            System.out.println("0 - Quitter");
-                            System.out.print("Votre choix : ");
-
-                            choix3 = choix(sc);
-                            switch (choix3) {
-                                case 1:
+                            System.out.print("--> Votre choix : ");
+                            choix2 = choix(sc);
+                            switch (choix2) {
+                                case TRIPRIXCROISSANT:
                                     boutique.trierStock(ModeTris.PRIX_CROISSANT);
                                     break;
-                                case 2:
+                                case TRIPRIXDECROISSANT:
                                     boutique.trierStock(ModeTris.PRIX_DECROISSANT);
                                     break;
-                                case 3:
+                                case TRINOMCROISSANT:
                                     boutique.trierStock(ModeTris.NOM_CROISSANT);
                                     break;
-                                case 4:
+                                case TRINOMDECROISSANT:
                                     boutique.trierStock((ModeTris.NOM_DECROISSANT));
                                     break;
-                                case 5:
+                                case ACHETER:
                                     do{
                                         System.out.print("Donner le numéro de l'élément à acheter : ");
                                         indice = choix(sc);
@@ -184,67 +161,54 @@ public class Runner {
                                     }
                                     
                                     break;
-                                case 6:
+                                case RETOUR:
                                     break;
-                                case 0:
+                                case QUITTER:
                                     System.out.println("\nFin du programme...\n");
                                     return ;
-                                default:
-                                    System.out.println("Choix invalide");
                             }
-                        }while(choix3 != 6);
-
+                        }while(choix2 != RETOUR);
                         break;
-                    case 3:
-                        System.out.println("\n=== Profil ===");
-                        utilisateur.afficherProfil();
-                        System.out.println("1 - Retour");
-                        System.out.println("0 - Quitter");
 
+                    case PROFIL:
+
+                        menu.afficheProfil(utilisateur);
                         do{
-                            System.out.print("Votre choix : ");
+                            System.out.print("--> Votre choix : ");
 
-                            choix4 = choix(sc);
-                            switch(choix4){
-                                case 1:
-                                    choix = -1;
+                            choix2 = choix(sc);
+                            switch(choix2){
+                                case RETOUR:
                                     break;
-                                case 0:
+                                case QUITTER:
                                     System.out.println("\nFin du programme...\n");
                                     return ;
-                                default:
-                                    System.out.println("Choix invalide");
                             }
-                        }while(choix4 != 0 && choix4 != 1);
+                        }while(choix2 != RETOUR);
                         break;
-                    case 4:
-                        System.out.println("\n=== Carte ===");
-                        carte.afficherLieux();
-                        carte.afficher10Lieux(utilisateur);
-                        System.out.println("1 - Retour");
-                        System.out.println("2 - Deplacement");
-                        System.out.println("0 - Quitter");
 
+                    case CARTE:
+
+                        menu.afficheCarte(carte,utilisateur);
                         do{
-                            System.out.print("Votre choix : ");
+                            System.out.print("--> Votre choix : ");
 
-                            choix5 = choix(sc);
-                            switch(choix5){
-                                case 1:
-                                    choix = -1;
+                            choix2 = choix(sc);
+                            switch(choix2){
+                                case RETOUR:
                                     break;
-                                case 0:
+                                case QUITTER:
                                     System.out.println("\nFin du programme...\n");
                                     return ;
-                                case 2:
+                                case DEPLACEMENT:
                                     do{
-                                        System.out.print("Donnez le numéro du lieu sur lequel vous voulez aller : ");
+                                        System.out.print("----> Donnez le numéro du lieu sur lequel vous voulez aller : ");
                                         indice = choix(sc);
                                     }while(indice < 1 || indice > carte.getLieux().size());
                                     do{
-                                        System.out.print("Voulez-vous passer par un lieu spécifique ? (1 : Oui / 0 : Non) : ");
-                                        choix6 = choix(sc);
-                                    }while(choix6 != 0 && choix6 != 1);
+                                        System.out.print("----> Voulez-vous passer par un lieu spécifique ? (1 : Oui / 0 : Non) : ");
+                                        choix3 = choix(sc);
+                                    }while(choix3 != NON && choix3 != OUI);
                                     if(utilisateur.getVehicules().getType() == TYPE.Voiture){
                                         transport = ModeTransport.VOITURE;
                                     }
@@ -255,12 +219,13 @@ public class Runner {
                                         transport = ModeTransport.PILIER;
                                     }
                                     else{
-                                        System.out.println("Vous ne pouvez pas y aller à pieds");
+                                        System.out.println("\n!!! Vous ne pouvez pas y aller à pieds");
                                         break;
                                     }
-                                    if(choix6 == 1){
+
+                                    if(choix3 == OUI){
                                         do{
-                                            System.out.print("Donnez le numéro du lieu par lequel vous voulez passer : ");
+                                            System.out.print("----> Donnez le numéro du lieu par lequel vous voulez passer : ");
                                             indice2 = choix(sc);
                                         }while(indice2 < 1 || indice2 > carte.getLieux().size());
                                         lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), transport);
@@ -268,27 +233,38 @@ public class Runner {
                                     else{
                                         lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
                                     }
+
                                     if(lieux.isEmpty()){
-                                        System.out.println("Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom());
+                                        System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Aucun chemin ne ramene vers la bas");
                                     }
                                     else{
                                         Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
                                         Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
-                                        System.out.println("Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
-                                        for(Lieu l : lieux){
-                                            System.out.println("->" + l.getNom());
+                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
+                                        float argent = 500*lieux.size();
+                                        if(faim + utilisateur.getFaim() >= 100){
+                                            System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
                                         }
-                                        utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
+                                        else{
+                                            System.out.println("\n- Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
+                                            for(Lieu l : lieux){
+                                                System.out.println("--- " + l.getNom());
+                                            }
+                                            utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
+                                            System.out.println("\n- Le trajet a augmente votre faim de " + utilisateur.getFaim() + " % a " + (faim + utilisateur.getFaim()) + " %");
+                                            utilisateur.ajouterFaim(faim);
+                                            System.out.println("\n- Vous avez gagné " + argent + " zenis lors de votre voyage");
+                                            utilisateur.ajouterArgent(argent);
+                                        }
                                     }
-                                    System.out.println("Vous êtes à " + utilisateur.getLieuActuel().getNom());
+                                    System.out.println("\n- Vous êtes actuellement à : " + utilisateur.getLieuActuel().getNom());
                                     break;
-                                default:
-                                    System.out.println("Choix invalide");
                             }
-                        }while(choix5 != 0 && choix5 != 1 && choix5 != 2);
+                        }while(choix2 != RETOUR && choix2 != DEPLACEMENT);
                         break;
-                    case 5:
-                        System.out.println("\n=== EVENEMENT ===");
+
+                    case EVENEMENT:
+                        menu.afficheEvenement(events,utilisateur);
                         if(ThreadLocalRandom.current().nextInt(0,2) == 0 || events.getDangers().size() <= 0){
                             System.out.println("\u001B[32m" + "[HISTOIRE] " + events.getHistoires().get(0).getDescription() + "\u001B[0m");
                             events.getHistoires().remove(0);
@@ -300,23 +276,24 @@ public class Runner {
                         }
                         else{
                             System.out.println("\u001B[31m" + "[DANGER] " + events.getDangers().get(0).getDescription() + "\u001B[0m");
-                            System.out.print("Lieux touchés : ");
+                            System.out.print("- Lieux touchés : ");
                             for(Lieu l : events.getDangers().get(0).getLieuxCibles()){
                                 System.out.print(l.getNom() + ", ");
                             }
                             do{
-                                System.out.print("\nVous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
-                                choix7 = choix(sc);
-                            }while(choix7 != 0 && choix7 != 1);
+                                System.out.print("\n- Vous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
+                                choix2 = choix(sc);
+                            }while(choix2 != 0 && choix2 != 1);
 
-                            if(choix7 == 0){
-                                System.out.println("Vous avez décidé de ne pas fuir");
+                            if(choix2 == 0){
+                                System.out.println("!!! Vous avez décidé de ne pas fuir");
                             }
                             else{
                                 do{
-                                    carte.afficherLieux();
+                                    carte.afficherLieux(utilisateur);
+                                    carte.afficherChemins(utilisateur);
                                     carte.afficher10Lieux(utilisateur);
-                                    System.out.print("Donnez le numéro du lieu où vous voulez fuir : ");
+                                    System.out.print("\n-> Donnez le numéro du lieu où vous voulez fuir : ");
                                     indice = choix(sc);
                                 }while(indice < 1 || indice > carte.getLieux().size());
 
@@ -331,25 +308,38 @@ public class Runner {
                                     transport = ModeTransport.PILIER;
                                 }
                                 else{
-                                    System.out.println("Vous ne pouvez pas y aller à pieds");
+                                    System.out.println("!!! Vous ne pouvez pas y aller à pieds");
                                     verif = false;
                                 }
+
                                 if(verif){
                                     lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
                                 }
+
                                 if(lieux.isEmpty()){
-                                    System.out.println("Vous ne pouvez pas accéder à ce lieu");
+                                    System.out.println("!!! Vous ne pouvez pas accéder à ce lieu");
                                 }
                                 else{
                                     Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
                                     Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
-                                    System.out.println("Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
-                                    for(Lieu l : lieux){
-                                        System.out.println("->" + l.getNom());
+                                    int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
+                                    float argent = 500*lieux.size();
+                                    if(faim + utilisateur.getFaim() >= 100){
+                                        System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
                                     }
-                                    utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
-                                    System.out.println("Vous êtes à " + utilisateur.getLieuActuel().getNom());
+                                    else{
+                                        System.out.println("\n- Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
+                                        for(Lieu l : lieux){
+                                            System.out.println("--- " + l.getNom());
+                                        }
+                                        utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
+                                        System.out.println("\n- Le trajet a augmente votre faim de " + utilisateur.getFaim() + " % a " + (faim + utilisateur.getFaim()) + " %");
+                                        utilisateur.ajouterFaim(faim);
+                                        System.out.println("\n- Vous avez gagné " + argent + " zenis lors de votre voyage");
+                                        utilisateur.ajouterArgent(argent);
+                                    }
                                 }
+                                System.out.println("\n- Vous êtes actuellement à : " + utilisateur.getLieuActuel().getNom());
                             }
 
                             for(Lieu l : events.getDangers().get(0).getLieuxCibles()){
@@ -358,26 +348,21 @@ public class Runner {
                             events.getDangers().remove(0);
 
                             if(utilisateur.getLieuActuel().estCondamne()){
-                                System.out.println("Vous êtes morts");
+                                System.out.println("!!! Vous êtes morts");
                                 return ;
                             }
 
                         }
-
                         break;
-                    case 0:
+
+                    case QUITTER:
                         System.out.println("\nFin du programme...\n");
                         return ;
-                    default:
-                        System.out.println("Choix invalide");
                 }
-                if((choix == -1 && choix2 == 2) || (choix == -1 && choix4 == 1) || (choix == -1 && choix5 == 1) || choix5 != 2){
-                    break;
-                }
-            }while(choix != 0 && choix != 1 && choix != 2 && choix != 3 && choix != 4 && choix != 5);
+
+            }while(choix2 != RETOUR && choix2 != EQUIPER && choix2 != DEPLACEMENT && choix != EVENEMENT);
         }
 
         sc.close();
-
     }
 }
