@@ -1,10 +1,8 @@
 package com.main.hackatonjr;
-import java.util.ArrayList;
-import java.util.random.RandomGenerator;
 
+import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
-import com.main.hackatonjr.*;
 @Component
 public class Catalogue {
     public ArrayList<Vetement> Vetements = new ArrayList<>();

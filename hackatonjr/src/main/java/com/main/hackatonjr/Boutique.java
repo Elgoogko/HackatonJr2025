@@ -1,9 +1,6 @@
 package com.main.hackatonjr;
 
 import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 enum ModeTris{ PRIX_CROISSANT, PRIX_DECROISSANT, NOM_CROISSANT, NOM_DECROISSANT}

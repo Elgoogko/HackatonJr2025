@@ -1,13 +1,8 @@
 package com.main.hackatonjr;
-import com.main.hackatonjr.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -53,6 +48,12 @@ public class Runner {
 
         ArrayList<Lieu> lieux = new ArrayList<Lieu>();
         ModeTransport transport = null;
+
+        Evenement event = null;
+
+        boolean mort;
+
+        float argent = 0;
 
 
         menu.afficheCreation(utilisateur,sc);
@@ -241,7 +242,7 @@ public class Runner {
                                         Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
                                         Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
                                         int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
-                                        float argent = 500*lieux.size();
+                                        argent = 500*lieux.size();
                                         if(faim + utilisateur.getFaim() >= 100){
                                             System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
                                         }
@@ -265,93 +266,121 @@ public class Runner {
 
                     case EVENEMENT:
                         menu.afficheEvenement(events,utilisateur);
-                        if(ThreadLocalRandom.current().nextInt(0,2) == 0 || events.getDangers().size() <= 0){
-                            System.out.println("\u001B[32m" + "[HISTOIRE] " + events.getHistoires().get(0).getDescription() + "\u001B[0m");
-                            events.getHistoires().remove(0);
-                            if(events.getHistoires().size() <= 0){
-                                System.out.println("\nVOUS AVEZ SURVECU !!!\n\n");
-                                return ;
-                            }
-                            break;
-                        }
-                        else{
-                            System.out.println("\u001B[31m" + "[DANGER] " + events.getDangers().get(0).getDescription() + "\u001B[0m");
-                            System.out.print("- Lieux touchés : ");
-                            for(Lieu l : events.getDangers().get(0).getLieuxCibles()){
-                                System.out.print(l.getNom() + ", ");
-                            }
-                            do{
-                                System.out.print("\n- Vous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
-                                choix2 = choix(sc);
-                            }while(choix2 != 0 && choix2 != 1);
+                        event = events.getRandomEvent();
+                        
+                        switch(event.getType()){
+                            case HISTOIRE:
+                                System.out.println("\u001B[32m" + "[HISTOIRE] " + event.getDescription() + "\u001B[0m");
+                                if(events.getHistoires().size()<=0){
+                                    System.out.println("!!! Bravo, Vous avez survécu");
+                                    return;
+                                }
+                                break;
 
-                            if(choix2 == 0){
-                                System.out.println("!!! Vous avez décidé de ne pas fuir");
-                            }
-                            else{
+                            case DANGER:
+                                System.out.println("\u001B[31m" + "[DANGER] " + event.getDescription() + "\u001B[0m");
+                                System.out.print("- Lieux touchés : ");
+                                for(Lieu l : event.getLieuxCibles()){
+                                    System.out.print(l.getNom() + ", ");
+                                }
                                 do{
-                                    carte.afficherLieux(utilisateur);
-                                    carte.afficherChemins(utilisateur);
-                                    carte.afficher10Lieux(utilisateur);
-                                    System.out.print("\n-> Donnez le numéro du lieu où vous voulez fuir : ");
-                                    indice = choix(sc);
-                                }while(indice < 1 || indice > carte.getLieux().size());
+                                    System.out.print("\n- Vous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
+                                    choix2 = choix(sc);
+                                }while(choix2 != NON && choix2 != OUI);
 
-                                verif = true;
-                                if(utilisateur.getVehicules().getType() == TYPE.Voiture){
-                                    transport = ModeTransport.VOITURE;
-                                }
-                                else if(utilisateur.getVehicules().getType() == TYPE.Nuage){
-                                    transport = ModeTransport.NUAGE;
-                                }
-                                else if(utilisateur.getVehicules().getType() == TYPE.Pilier){
-                                    transport = ModeTransport.PILIER;
+                                if(choix2 == NON){
+                                    System.out.println("!!! Vous avez décidé de ne pas fuir");
                                 }
                                 else{
-                                    System.out.println("!!! Vous ne pouvez pas y aller à pieds");
-                                    verif = false;
-                                }
+                                    do{
+                                        carte.afficherLieux(utilisateur);
+                                        carte.afficherChemins(utilisateur);
+                                        carte.afficher10Lieux(utilisateur);
+                                        System.out.print("\n-> Donnez le numéro du lieu où vous voulez fuir : ");
+                                        indice = choix(sc);
+                                    }while(indice < 1 || indice > carte.getLieux().size());
 
-                                if(verif){
-                                    lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
-                                }
+                                    verif = true;
 
-                                if(lieux.isEmpty()){
-                                    System.out.println("!!! Vous ne pouvez pas accéder à ce lieu");
-                                }
-                                else{
-                                    Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
-                                    Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
-                                    int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
-                                    float argent = 500*lieux.size();
-                                    if(faim + utilisateur.getFaim() >= 100){
-                                        System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
+                                    if(utilisateur.getVehicules().getType() == TYPE.Voiture){
+                                        transport = ModeTransport.VOITURE;
+                                    }
+                                    else if(utilisateur.getVehicules().getType() == TYPE.Nuage){
+                                        transport = ModeTransport.NUAGE;
+                                    }
+                                    else if(utilisateur.getVehicules().getType() == TYPE.Pilier){
+                                        transport = ModeTransport.PILIER;
                                     }
                                     else{
-                                        System.out.println("\n- Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
-                                        for(Lieu l : lieux){
-                                            System.out.println("--- " + l.getNom());
-                                        }
-                                        utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
-                                        System.out.println("\n- Le trajet a augmente votre faim de " + utilisateur.getFaim() + " % a " + (faim + utilisateur.getFaim()) + " %");
-                                        utilisateur.ajouterFaim(faim);
-                                        System.out.println("\n- Vous avez gagné " + argent + " zenis lors de votre voyage");
-                                        utilisateur.ajouterArgent(argent);
+                                        System.out.println("!!! Vous ne pouvez pas y aller à pieds");
+                                        verif = false;
                                     }
+
+                                    if(verif){
+                                        lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
+                                    }
+
+                                    if(lieux.isEmpty()){
+                                        System.out.println("!!! Vous ne pouvez pas accéder à ce lieu");
+                                    }
+                                    else{
+                                        Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
+                                        Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
+                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
+                                        argent = 500*lieux.size();
+                                        if(faim + utilisateur.getFaim() >= 100){
+                                            System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
+                                        }
+                                        else{
+                                            System.out.println("\n- Vous êtes passé par les lieux suivants (Distance parcourue = " + distanceParourue + " / Temps du trajet = " + tempsTrajet + ") : ");
+                                            for(Lieu l : lieux){
+                                                System.out.println("--- " + l.getNom());
+                                            }
+                                            utilisateur.setLieuActuel(carte.getLieux().get(indice - 1));
+                                            System.out.println("\n- Le trajet a augmente votre faim de " + utilisateur.getFaim() + " % a " + (faim + utilisateur.getFaim()) + " %");
+                                            utilisateur.ajouterFaim(faim);
+                                            System.out.println("\n- Vous avez gagné " + argent + " zenis lors de votre voyage");
+                                            utilisateur.ajouterArgent(argent);
+                                        }
+                                    }
+                                    System.out.println("\n- Vous êtes actuellement à : " + utilisateur.getLieuActuel().getNom());
                                 }
-                                System.out.println("\n- Vous êtes actuellement à : " + utilisateur.getLieuActuel().getNom());
-                            }
 
-                            for(Lieu l : events.getDangers().get(0).getLieuxCibles()){
-                                l.setCondamne(true);
-                            }
-                            events.getDangers().remove(0);
+                                mort = events.effetEvenement(event, utilisateur);
 
-                            if(utilisateur.getLieuActuel().estCondamne()){
-                                System.out.println("!!! Vous êtes morts");
-                                return ;
-                            }
+                                if(mort == true){
+                                    System.out.println("!!! Vous etes mort");
+                                    return ;
+                                }
+                                else{
+                                    System.out.println("!!! Vous avez evite la mort");
+                                }
 
+                                break;
+
+                            case BONUS:
+                                argent = utilisateur.getArgent();
+                                mort = events.effetEvenement(event, utilisateur);
+                                System.out.println("\u001B[32m" + "[BONUS] " + event.getDescription() + (utilisateur.getArgent() - argent) + " zenis" + "\u001B[0m");
+                                break;
+
+                            case MALLUS:
+                                argent = utilisateur.getArgent();
+                                mort = events.effetEvenement(event, utilisateur);
+                                System.out.println("\u001B[31m" + "[MALLUS] " + event.getDescription() + (argent - utilisateur.getArgent()) + " zenis" + "\u001B[0m");
+                                break;
+
+                            case ATTAQUE:
+                                System.out.println("\u001B[31m" + "[ATTAQUE] " + event.getDescription() + "\u001B[0m");
+                                mort = events.effetEvenement(event, utilisateur);
+                                if(mort == false){
+                                    System.out.println("!!! Vous avez survecu a l'attaque mais votre tenue a été détruite");
+                                }
+                                else{
+                                    System.out.println("!!! Vous etes mort");
+                                    return ;
+                                }
+                                break;
                         }
                         break;
 

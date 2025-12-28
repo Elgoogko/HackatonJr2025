@@ -2,7 +2,6 @@ package com.main.hackatonjr;
 
 enum Couleur{ BLEU, ROUGE, VERT}
 
-
 public class Capsule extends Stockables{
     
     private Couleur couleur;

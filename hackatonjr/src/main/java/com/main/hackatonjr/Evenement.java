@@ -2,17 +2,18 @@ package com.main.hackatonjr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-enum Type_Evenement {HISTOIRE,DANGER,BONUS,MALLUS}
+enum T_Evenement {HISTOIRE,DANGER,BONUS,MALLUS,ATTAQUE}
 
 public class Evenement {
-    private Type_Evenement type;
+    private T_Evenement type;
     private String description;
     private int triggerTimeSec;
     private boolean declenche;
     private ArrayList<Lieu> lieuxCibles;
 
-    public Evenement(Type_Evenement type, int triggerTimeSec, String description, ArrayList<Lieu> lieuxCibles) {
+    public Evenement(T_Evenement type, int triggerTimeSec, String description, ArrayList<Lieu> lieuxCibles) {
         this.type = type;
         this.triggerTimeSec = triggerTimeSec;
         this.description = description;
@@ -20,7 +21,7 @@ public class Evenement {
         this.declenche = false;
     }
 
-    public Type_Evenement getType() {
+    public T_Evenement getType() {
         return type;
     }
     public String getDescription() {
@@ -38,6 +39,8 @@ public class Evenement {
     public List<Lieu> getLieuxCibles() {
         return lieuxCibles;
     }
+
+    
     
 }
     

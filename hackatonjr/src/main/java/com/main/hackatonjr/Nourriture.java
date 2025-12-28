@@ -1,7 +1,5 @@
 package com.main.hackatonjr;
 
-import com.main.hackatonjr.Stockables;
-
 public class Nourriture extends Stockables {
     private int RenduFaim;
 

@@ -2,10 +2,6 @@ package com.main.hackatonjr;
 
 import java.util.ArrayList;
 
-import org.springframework.stereotype.Component;
-
-import com.main.hackatonjr.*;
-
 public class Utilisateur {
     private String nom;
     private float argent;
