@@ -1,21 +1,20 @@
 package com.main.hackatonjr;
 
-enum ModeTransport {
-    VOITURE, NUAGE, TOUS, PILIER
-}
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chemin {
     private float distance;
     private Lieu lieuA;
     private Lieu lieuB;
-    private ModeTransport modeTransportOk;
+    private ArrayList<TYPE> modeTransportOk;
 
     public Chemin(Lieu lieuA, Lieu lieuB) {
         // par defaut tous les modes de transport ok
-        this(lieuA, lieuB, ModeTransport.TOUS);
+        this(lieuA, lieuB, new ArrayList<TYPE>(List.of(TYPE.Nuage,TYPE.Pilier,TYPE.Voiture)));
     }
 
-    public Chemin(Lieu lieuA, Lieu lieuB, ModeTransport modeTransportAccepte) {
+    public Chemin(Lieu lieuA, Lieu lieuB, ArrayList<TYPE> modeTransportAccepte) {
         this.lieuA = lieuA;
         this.lieuB = lieuB;
         this.distance = Coordonnees.distance(lieuA.getCoordonnees(), lieuB.getCoordonnees());
@@ -38,7 +37,7 @@ public class Chemin {
         return lieuB;
     }
 
-    public ModeTransport getModeTransportOk() {
+    public ArrayList<TYPE> getModeTransportOk() {
         return modeTransportOk;
     }
 

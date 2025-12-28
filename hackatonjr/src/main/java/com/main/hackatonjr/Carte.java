@@ -3,6 +3,7 @@ package com.main.hackatonjr;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -22,9 +23,9 @@ public class Carte {
         return chemins;
     }
 
-    public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee, ModeTransport modeTransport) {
+    public ArrayList<Lieu> plusCourtChemin(Lieu depart, Lieu arrivee, TYPE modeTransport) {
         // Implémentation de l'algorithme de Dijkstra pour trouver le plus court chemin
-        if (modeTransport == ModeTransport.PILIER) {
+        if (modeTransport == TYPE.Pilier) {
             // mode pilier : on peut aller directement au lieu d'arrivée
             ArrayList<Lieu> cheminsFinal = new ArrayList<Lieu>();
             if(arrivee.estCondamne()){
@@ -56,8 +57,7 @@ public class Carte {
 
             for (Chemin chemin : courant.getChemins()) { // pour chaque chemin adjacent au lieu courant
 
-                boolean transportOk = modeTransport == chemin.getModeTransportOk()
-                        || chemin.getModeTransportOk() == ModeTransport.TOUS;
+                boolean transportOk = chemin.getModeTransportOk().contains(modeTransport);
                 Lieu voisin = chemin.getAutre(courant); // donne le lieu auquel mène le chemin
                 float nouvelleDist = distances.getOrDefault(courant, Float.MAX_VALUE)
                         + chemin.getDistance(); // dist = distance pour aller au courant (ou l'infini par defaut si
@@ -91,9 +91,9 @@ public class Carte {
         return cheminFinal;
     }
 
-    public float totalDistanceChemin(ArrayList<Lieu> cheminLieux, ModeTransport modeTransport) {
+    public float totalDistanceChemin(ArrayList<Lieu> cheminLieux, TYPE modeTransport) {
         float totalDistance = 0f;
-        if (modeTransport == ModeTransport.PILIER) {
+        if (modeTransport == TYPE.Pilier) {
             return Coordonnees.distance(cheminLieux.get(0).getCoordonnees(),
                     cheminLieux.get(cheminLieux.size() - 1).getCoordonnees());
         }
@@ -112,7 +112,7 @@ public class Carte {
     }
 
     public ArrayList<Lieu> plusCourtCheminAvecEtape(Lieu depart, Lieu etape, Lieu arrivee,
-            ModeTransport modeTransport) {
+            TYPE modeTransport) {
         ArrayList<Lieu> premierSegment = plusCourtChemin(depart, etape, modeTransport);
         ArrayList<Lieu> deuxiemeSegment = plusCourtChemin(etape, arrivee, modeTransport);
         if (premierSegment.isEmpty() || deuxiemeSegment.isEmpty()) {
@@ -160,16 +160,16 @@ public class Carte {
         chemins = new ArrayList<Chemin>();
         // relier les points qui se suivent entre eux
         for (int i = 0; i < lieux.size() - 1; i++) {
-            Chemin c = new Chemin(lieux.get(i), lieux.get(i + 1), ModeTransport.TOUS);
+            Chemin c = new Chemin(lieux.get(i), lieux.get(i + 1), new ArrayList<TYPE>(List.of(TYPE.Nuage,TYPE.Pilier,TYPE.Voiture)));
             chemins.add(c);
             lieux.get(i).addChemin(c);
             lieux.get(i + 1).addChemin(c);
         }
         // relier quelques points supplémentaires
-        Chemin c1 = new Chemin(lieux.get(0), lieux.get(2), ModeTransport.NUAGE);
-        Chemin c2 = new Chemin(lieux.get(1), lieux.get(9), ModeTransport.VOITURE);
-        Chemin c3 = new Chemin(lieux.get(1), lieux.get(4), ModeTransport.TOUS);
-        Chemin c4 = new Chemin(lieux.get(2), lieux.get(6), ModeTransport.NUAGE);
+        Chemin c1 = new Chemin(lieux.get(0), lieux.get(2), new ArrayList<TYPE>(List.of(TYPE.Nuage)));
+        Chemin c2 = new Chemin(lieux.get(1), lieux.get(9), new ArrayList<TYPE>(List.of(TYPE.Voiture)));
+        Chemin c3 = new Chemin(lieux.get(1), lieux.get(4), new ArrayList<TYPE>(List.of(TYPE.Nuage,TYPE.Pilier,TYPE.Voiture)));
+        Chemin c4 = new Chemin(lieux.get(2), lieux.get(6), new ArrayList<TYPE>(List.of(TYPE.Nuage)));
         chemins.add(c1);
         chemins.add(c2);
         chemins.add(c3);
@@ -233,18 +233,18 @@ public class Carte {
         System.out.println("\u001B[96m" + (utilisateur.getLieuActuel().getId() + 1) + ". " + "\u001B[0m" + returnNomLieu(utilisateur.getLieuActuel(),utilisateur));
         for(Lieu l : this.lieux){
             if(l != utilisateur.getLieuActuel() && !l.estCondamne()){
-                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.PILIER).isEmpty()){
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,TYPE.Pilier).isEmpty()){
                     string="Pilier";
                 }
 
-                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.NUAGE).isEmpty()){
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,TYPE.Nuage).isEmpty()){
                     if(string!=""){
                         string+=" / ";
                     }
                     string+="Nuage";
                 }
 
-                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.VOITURE).isEmpty()){
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,TYPE.Voiture).isEmpty()){
                     if(string!=""){
                         string+=" / ";
                     }

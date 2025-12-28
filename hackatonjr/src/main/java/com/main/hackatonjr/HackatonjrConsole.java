@@ -30,7 +30,6 @@ public class HackatonjrConsole {
         String nomEquipement;
 
         ArrayList<Lieu> lieux = new ArrayList<Lieu>();
-        ModeTransport transport = null;
 
         Evenement event = null;
 
@@ -193,16 +192,8 @@ public class HackatonjrConsole {
                                         System.out.print("----> Voulez-vous passer par un lieu spécifique ? (1 : Oui / 0 : Non) : ");
                                         choix3 = menu.choix(sc);
                                     }while(choix3 != NON && choix3 != OUI);
-                                    if(utilisateur.getVehicules().getType() == TYPE.Voiture){
-                                        transport = ModeTransport.VOITURE;
-                                    }
-                                    else if(utilisateur.getVehicules().getType() == TYPE.Nuage){
-                                        transport = ModeTransport.NUAGE;
-                                    }
-                                    else if(utilisateur.getVehicules().getType() == TYPE.Pilier){
-                                        transport = ModeTransport.PILIER;
-                                    }
-                                    else{
+
+                                    if(utilisateur.getVehicules().getType() == TYPE.Pieds){
                                         System.out.println("\n!!! Vous ne pouvez pas y aller à pieds");
                                         break;
                                     }
@@ -212,19 +203,19 @@ public class HackatonjrConsole {
                                             System.out.print("----> Donnez le numéro du lieu par lequel vous voulez passer : ");
                                             indice2 = menu.choix(sc);
                                         }while(indice2 < 1 || indice2 > carte.getLieux().size());
-                                        lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), transport);
+                                        lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), utilisateur.getVehicules().getType());
                                     }
                                     else{
-                                        lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
+                                        lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), utilisateur.getVehicules().getType());
                                     }
 
                                     if(lieux.isEmpty()){
                                         System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Aucun chemin ne ramene vers la bas");
                                     }
                                     else{
-                                        Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
+                                        Float distanceParourue = carte.totalDistanceChemin(lieux, utilisateur.getVehicules().getType());
                                         Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
-                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
+                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),TYPE.Voiture));
                                         argent = 500*lieux.size();
                                         if(faim + utilisateur.getFaim() >= 100){
                                             System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
@@ -285,31 +276,22 @@ public class HackatonjrConsole {
 
                                     verif = true;
 
-                                    if(utilisateur.getVehicules().getType() == TYPE.Voiture){
-                                        transport = ModeTransport.VOITURE;
-                                    }
-                                    else if(utilisateur.getVehicules().getType() == TYPE.Nuage){
-                                        transport = ModeTransport.NUAGE;
-                                    }
-                                    else if(utilisateur.getVehicules().getType() == TYPE.Pilier){
-                                        transport = ModeTransport.PILIER;
-                                    }
-                                    else{
+                                    if(utilisateur.getVehicules().getType() == TYPE.Pieds){
                                         System.out.println("!!! Vous ne pouvez pas y aller à pieds");
                                         verif = false;
                                     }
 
                                     if(verif){
-                                        lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), transport);
+                                        lieux = carte.plusCourtChemin(utilisateur.getLieuActuel(), carte.getLieux().get(indice - 1), utilisateur.getVehicules().getType());
                                     }
 
                                     if(lieux.isEmpty()){
                                         System.out.println("!!! Vous ne pouvez pas accéder à ce lieu");
                                     }
                                     else{
-                                        Float distanceParourue = carte.totalDistanceChemin(lieux, transport);
+                                        Float distanceParourue = carte.totalDistanceChemin(lieux, utilisateur.getVehicules().getType());
                                         Float tempsTrajet = utilisateur.getVehicules().getTempsTrajet(distanceParourue);
-                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),ModeTransport.VOITURE));
+                                        int faim = (int) ((distanceParourue*100)/carte.totalDistanceChemin(carte.getLieux(),TYPE.Voiture));
                                         argent = 500*lieux.size();
                                         if(faim + utilisateur.getFaim() >= 100){
                                             System.out.println("\n!!! Vous n'avez pas pu accéder à " + carte.getLieux().get(indice - 1).getNom() + "\nCause : Vous avez " + utilisateur.getFaim() + " % de faim et ce trajet le fera monter a " + (faim + utilisateur.getFaim()) + " % causant votre mort");
