@@ -8,8 +8,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class HackatonjrApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(HackatonjrApplication.class, args);
-        Runner runner = context.getBean(Runner.class); //Injection Spring
-        runner.start();
 		context.close();
 	}
 }

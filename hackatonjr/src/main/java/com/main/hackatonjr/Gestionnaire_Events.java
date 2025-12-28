@@ -30,7 +30,7 @@ public class Gestionnaire_Events {
     }
 
     public Gestionnaire_Events(Carte carte){
-        this.typesEvenements = new ArrayList<>(List.of(new Type_Evenement(T_Evenement.HISTOIRE,0.05f),new Type_Evenement(T_Evenement.DANGER,0.05f),new Type_Evenement(T_Evenement.BONUS,0.05f),new Type_Evenement(T_Evenement.MALLUS,0.05f),new Type_Evenement(T_Evenement.ATTAQUE,0.8f)));
+        this.typesEvenements = new ArrayList<>(List.of(new Type_Evenement(T_Evenement.HISTOIRE,0.3f),new Type_Evenement(T_Evenement.DANGER,0.3f),new Type_Evenement(T_Evenement.BONUS,0.15f),new Type_Evenement(T_Evenement.MALLUS,0.15f),new Type_Evenement(T_Evenement.ATTAQUE,0.1f)));
 
         this.dangers = new ArrayList<>();
         this.dangers.add(new Evenement(T_Evenement.DANGER, 0, "Friezer lance une attaque", retourLieuxRandom(carte.getLieux())));

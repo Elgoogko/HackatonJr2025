@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "HackatonjrConsole",
+            "request": "launch",
+            "mainClass": "com.main.hackatonjr.HackatonjrConsole",
+            "projectName": "hackatonjr"
+        },
+        {
+            "type": "java",
             "name": "Runner",
             "request": "launch",
             "mainClass": "com.main.hackatonjr.Runner",

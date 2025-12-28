@@ -5,6 +5,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
+    public int choix(Scanner sc){
+        String chaine = sc.nextLine();
+        if(chaine == null || chaine.isEmpty()){
+            return -1;
+        }
+        try{
+            return Integer.parseInt(chaine);
+        }
+        catch(NumberFormatException e){
+            return -1;
+        }        
+    }
 
     public void afficheLigneVide(int taille){
         int i=0;

@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Carte {
     private ArrayList<Lieu> lieux;
     private ArrayList<Chemin> chemins;
@@ -231,21 +228,31 @@ public class Carte {
         }
         */
 
+        String string="";
         System.out.println("\n-> Chemins : \n");
         System.out.println("\u001B[96m" + (utilisateur.getLieuActuel().getId() + 1) + ". " + "\u001B[0m" + returnNomLieu(utilisateur.getLieuActuel(),utilisateur));
         for(Lieu l : this.lieux){
             if(l != utilisateur.getLieuActuel() && !l.estCondamne()){
-                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.TOUS).isEmpty()){
-                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Tous)");
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.PILIER).isEmpty()){
+                    string="Pilier";
                 }
-                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.PILIER).isEmpty()){
-                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Pilier)");
+
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.NUAGE).isEmpty()){
+                    if(string!=""){
+                        string+=" / ";
+                    }
+                    string+="Nuage";
                 }
-                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.NUAGE).isEmpty()){
-                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Nuage)");
+
+                if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.VOITURE).isEmpty()){
+                    if(string!=""){
+                        string+=" / ";
+                    }
+                    string+="Voiture";
                 }
-                else if(!this.plusCourtChemin(utilisateur.getLieuActuel(),l,ModeTransport.VOITURE).isEmpty()){
-                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (Voiture)");
+
+                if(string!=""){
+                    System.out.println(" ---> " + returnNomLieu(l,utilisateur) + " (" + string + ")");
                 }
             }
         }
@@ -266,21 +273,21 @@ public class Carte {
     }
 
     public void afficher10Lieux(Utilisateur utilisateur){
-        System.out.println("\n " + afficherId(this.lieux.get(0).getId(),utilisateur) + " <------------------------>  " + afficherId(this.lieux.get(1).getId(),utilisateur) + "  <-----------------------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
+        System.out.println("\n " + afficherId(this.lieux.get(0).getId(),utilisateur) + " <-----V-O-I-T-U-R-E------>  " + afficherId(this.lieux.get(1).getId(),utilisateur) + "  <-----------------------> " + afficherId(this.lieux.get(9).getId(),utilisateur));
         System.out.println(" ^                            ^ ^                           ^");
         System.out.println(" |                       _____| |                           |");
         System.out.println(" |                      |       |                           v");
-        System.out.println(" |                      |       |                           " + afficherId(this.lieux.get(8).getId(),utilisateur));
-        System.out.println(" |                      |       |                           ^");
-        System.out.println(" |                      |       |                           |");
-        System.out.println(" |                      |       |                           v");
-        System.out.println(" |                      |       |                           " + afficherId(this.lieux.get(7).getId(),utilisateur));
+        System.out.println(" N                      |       |                           " + afficherId(this.lieux.get(8).getId(),utilisateur));
+        System.out.println(" U                      |       |                           ^");
+        System.out.println(" A                      |       |                           |");
+        System.out.println(" G                      |       |                           v");
+        System.out.println(" E                      |       |                           " + afficherId(this.lieux.get(7).getId(),utilisateur));
         System.out.println(" |  ____________________|       |                           ^");
         System.out.println(" | |                            |                           |");
         System.out.println(" v v                            v                           v");
         System.out.println("  " + afficherId(this.lieux.get(2).getId(),utilisateur) + " <----------> " + afficherId(this.lieux.get(3).getId(),utilisateur) + " <----------> " + afficherId(this.lieux.get(4).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(5).getId(),utilisateur) + " <---------> " + afficherId(this.lieux.get(6).getId(),utilisateur));
         System.out.println(" ^                                                          ^");
         System.out.println(" |                                                          |");
-        System.out.println(" |__________________________________________________________|" + "\u001B[0m");
+        System.out.println(" |________________________N_U_A_G_E_________________________|" + "\u001B[0m");
     }
 }

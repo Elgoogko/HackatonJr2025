@@ -1,9 +1,7 @@
 package com.main.hackatonjr;
 
 import java.util.ArrayList;
-import org.springframework.stereotype.Component;
 
-@Component
 public class Catalogue {
     public ArrayList<Vetement> Vetements = new ArrayList<>();
     public ArrayList<Nourriture> Nourritures = new ArrayList<>();

@@ -2,26 +2,9 @@ package com.main.hackatonjr;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
-import org.springframework.stereotype.Component;
 
-@Component
-public class Runner {
-    public int choix(Scanner sc){
-        String chaine = sc.nextLine();
-        if(chaine == null || chaine.isEmpty()){
-            return -1;
-        }
-        try{
-            return Integer.parseInt(chaine);
-        }
-        catch(NumberFormatException e){
-            return -1;
-        }        
-    }
-
-    public void start() {
-
+public class HackatonjrConsole {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         Menu menu = new Menu();
@@ -66,14 +49,14 @@ public class Runner {
 
             do{
                 System.out.print("--> Votre choix : ");
-                choix = choix(sc);
+                choix = menu.choix(sc);
                 switch (choix) {
                     case INVENTAIRE:
                         menu.afficheInventaire(utilisateur);
 
                         do{
                             System.out.print("--> Votre choix : ");
-                            choix2 = choix(sc);
+                            choix2 = menu.choix(sc);
                             
                             switch(choix2){
                                 case EQUIPER:
@@ -83,7 +66,7 @@ public class Runner {
                                     else{
                                         do{
                                             System.out.print("Donner le numéro de l'élément à équiper : ");
-                                            indice = choix(sc);
+                                            indice = menu.choix(sc);
                                             taille = utilisateur.getInventaire().size();
                                         }while(indice < 1 || indice > utilisateur.getInventaire().size());
                                         nomEquipement = utilisateur.getInventaire().get(indice - 1).getNom();
@@ -117,7 +100,7 @@ public class Runner {
                             menu.afficheBoutique(boutique);
 
                             System.out.print("--> Votre choix : ");
-                            choix2 = choix(sc);
+                            choix2 = menu.choix(sc);
                             switch (choix2) {
                                 case TRIPRIXCROISSANT:
                                     boutique.trierStock(ModeTris.PRIX_CROISSANT);
@@ -134,19 +117,19 @@ public class Runner {
                                 case ACHETER:
                                     do{
                                         System.out.print("Donner le numéro de l'élément à acheter : ");
-                                        indice = choix(sc);
+                                        indice = menu.choix(sc);
                                     }while(indice<1 || indice>boutique.getStock().size());
                                     boutique.ajouterPanier(boutique.getStock().get(indice-1));
 
                                     do{
                                         do{
                                             System.out.print("Voulez-vous rajouter un élément ? (1 : Oui / 0 : Non) : ");
-                                            reponse = choix(sc);
+                                            reponse = menu.choix(sc);
                                         }while(reponse != 1 && reponse != 0);
                                         if(reponse == 1){
                                             do{
                                                 System.out.print("Donner le numéro de l'élément à rajouter au panier : ");
-                                                indice = choix(sc);
+                                                indice = menu.choix(sc);
                                             }while(indice<1 || indice>boutique.getStock().size() || (!(boutique.getStock().get(indice-1) instanceof Capsule) && boutique.estDansPanier(boutique.getStock().get(indice-1))));
                                             boutique.ajouterPanier(boutique.getStock().get(indice-1));
                                         }
@@ -177,7 +160,7 @@ public class Runner {
                         do{
                             System.out.print("--> Votre choix : ");
 
-                            choix2 = choix(sc);
+                            choix2 = menu.choix(sc);
                             switch(choix2){
                                 case RETOUR:
                                     break;
@@ -194,7 +177,7 @@ public class Runner {
                         do{
                             System.out.print("--> Votre choix : ");
 
-                            choix2 = choix(sc);
+                            choix2 = menu.choix(sc);
                             switch(choix2){
                                 case RETOUR:
                                     break;
@@ -204,11 +187,11 @@ public class Runner {
                                 case DEPLACEMENT:
                                     do{
                                         System.out.print("----> Donnez le numéro du lieu sur lequel vous voulez aller : ");
-                                        indice = choix(sc);
+                                        indice = menu.choix(sc);
                                     }while(indice < 1 || indice > carte.getLieux().size());
                                     do{
                                         System.out.print("----> Voulez-vous passer par un lieu spécifique ? (1 : Oui / 0 : Non) : ");
-                                        choix3 = choix(sc);
+                                        choix3 = menu.choix(sc);
                                     }while(choix3 != NON && choix3 != OUI);
                                     if(utilisateur.getVehicules().getType() == TYPE.Voiture){
                                         transport = ModeTransport.VOITURE;
@@ -227,7 +210,7 @@ public class Runner {
                                     if(choix3 == OUI){
                                         do{
                                             System.out.print("----> Donnez le numéro du lieu par lequel vous voulez passer : ");
-                                            indice2 = choix(sc);
+                                            indice2 = menu.choix(sc);
                                         }while(indice2 < 1 || indice2 > carte.getLieux().size());
                                         lieux = carte.plusCourtCheminAvecEtape(utilisateur.getLieuActuel(), carte.getLieux().get(indice2 - 1), carte.getLieux().get(indice - 1), transport);
                                     }
@@ -272,7 +255,7 @@ public class Runner {
                             case HISTOIRE:
                                 System.out.println("\u001B[32m" + "[HISTOIRE] " + event.getDescription() + "\u001B[0m");
                                 if(events.getHistoires().size()<=0){
-                                    System.out.println("!!! Bravo, Vous avez survécu");
+                                    System.out.println("!!! Bravo, Vous avez survécu\n");
                                     return;
                                 }
                                 break;
@@ -285,7 +268,7 @@ public class Runner {
                                 }
                                 do{
                                     System.out.print("\n- Vous vous trouvez actuellement à " + utilisateur.getLieuActuel().getNom() + " , voulez-vous fuir ? (1 : Oui / 0 : Non) : ");
-                                    choix2 = choix(sc);
+                                    choix2 = menu.choix(sc);
                                 }while(choix2 != NON && choix2 != OUI);
 
                                 if(choix2 == NON){
@@ -297,7 +280,7 @@ public class Runner {
                                         carte.afficherChemins(utilisateur);
                                         carte.afficher10Lieux(utilisateur);
                                         System.out.print("\n-> Donnez le numéro du lieu où vous voulez fuir : ");
-                                        indice = choix(sc);
+                                        indice = menu.choix(sc);
                                     }while(indice < 1 || indice > carte.getLieux().size());
 
                                     verif = true;
@@ -349,7 +332,7 @@ public class Runner {
                                 mort = events.effetEvenement(event, utilisateur);
 
                                 if(mort == true){
-                                    System.out.println("!!! Vous etes mort");
+                                    System.out.println("!!! Vous etes mort\n");
                                     return ;
                                 }
                                 else{
@@ -377,7 +360,7 @@ public class Runner {
                                     System.out.println("!!! Vous avez survecu a l'attaque mais votre tenue a été détruite");
                                 }
                                 else{
-                                    System.out.println("!!! Vous etes mort");
+                                    System.out.println("!!! Vous etes mort\n");
                                     return ;
                                 }
                                 break;
