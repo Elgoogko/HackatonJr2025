@@ -7,9 +7,9 @@ import java.util.Scanner;
 public class Display {
 
     public void displayInventory(User user){
-        int counter=1;
+        int counter = 1;
         for(Stockable stockable : user.getInventory()){
-            System.out.print(counter + ". " + stockable.getName()  + " " + stockable.getPrice() + " zenis");
+            System.out.print(Colors.LIGHT_CYAN + counter + ". " + Colors.RESET + stockable.getName());
             if(user.isEquipped(stockable) == true){
                 System.out.println(Colors.LIGHT_CYAN + " (Equipped)" + Colors.RESET);
             }
@@ -30,27 +30,24 @@ public class Display {
     }
 
     public void displayProfile(User user){
-        System.out.println("- Username : " + Colors.LIGHT_CYAN + user.getName() + Colors.RESET);
-        System.out.println("- Current location : " + Colors.LIGHT_CYAN + user.getCurrentLocation().getName() + Colors.RESET);
-        System.out.println("- Money : " + Colors.LIGHT_CYAN + user.getMoney() + Colors.RESET);
-        System.out.println("- Hunger : " + Colors.LIGHT_CYAN + user.getHunger() + "%" + Colors.RESET);
-        System.out.println("- Vehicle : " + Colors.LIGHT_CYAN + stockableName(user.getVehicle()) + Colors.RESET);
-        System.out.println("- Outfit : ");
-        System.out.println("--- Head : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getHead()) + Colors.RESET);
-        System.out.println("--- Top : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getTop()) + Colors.RESET);
-        System.out.println("--- Bottom : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getBottom()) + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Username : " + Colors.LIGHT_CYAN + user.getName() + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Current location : " + Colors.LIGHT_CYAN + user.getCurrentLocation().getName() + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Money : " + Colors.LIGHT_CYAN + user.getMoney() + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Hunger : " + Colors.LIGHT_CYAN + user.getHunger() + "%" + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Vehicle : " + Colors.LIGHT_CYAN + stockableName(user.getVehicle()) + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Outfit : ");
+        System.out.println(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Head : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getHead()) + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Top : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getTop()) + Colors.RESET);
+        System.out.println(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Bottom : " + Colors.LIGHT_CYAN + stockableName(user.getOutfit().getBottom()) + Colors.RESET);
     }
 
     public void displayShop(Shop shop){
-        int counter=1;
+        int counter = 1;
         for(Stockable stockable : shop.getStock()){
-            System.out.println(counter + ". " + stockable.getName()  + " " + stockable.getPrice() + " zénis");
+            System.out.println(Colors.LIGHT_CYAN + counter + ". " + Colors.RESET + stockable.getName()  + " (" + stockable.getPrice() + " zenis)");
             counter++;
         }
     }
-
-
-
 
     public String coloredLocationName(Location location, User user){
         if(location.getId() == user.getCurrentLocation().getId()){
@@ -65,8 +62,8 @@ public class Display {
     }
 
     public void displayLocations(GameMap map, User user){
-        int counter=1;
-        System.out.println("\n-> Locations (" + map.getLocations().size() + ") : \n" + Colors.LIGHT_CYAN);
+        int counter = 1;
+        System.out.println(Colors.LIGHT_CYAN + "\n->" + Colors.RESET + " Locations (" + map.getLocations().size() + ") : \n" + Colors.LIGHT_CYAN);
         for(Location location : map.getLocations()){
             System.out.println(counter + ". " + coloredLocationName(location,user));
             counter++;
@@ -74,36 +71,35 @@ public class Display {
         System.out.print(Colors.RESET);
     }
 
+    //Display all the possible paths from the current location of the user
     public void displayPaths(GameMap map, User user){
-        int counter = 1;
         String string = "";
 
-        System.out.println("\n-> Paths : \n");
+        System.out.println(Colors.LIGHT_CYAN + "\n->" + Colors.RESET + " Paths : \n");
         System.out.println(Colors.LIGHT_CYAN + (user.getCurrentLocation().getId() + 1) + ". " + Colors.RESET + coloredLocationName(user.getCurrentLocation(),user));
         for(Location location : map.getLocations()){
             if(location != user.getCurrentLocation() && !location.isCondemned()){
                 if(!map.shortestPath(user.getCurrentLocation(),location,VehicleType.PILLAR).isEmpty()){
-                    string="Pillar";
+                    string = "Pillar";
                 }
 
                 if(!map.shortestPath(user.getCurrentLocation(),location,VehicleType.CLOUD).isEmpty()){
-                    if(string!=""){
-                        string+=" / ";
+                    if(string != ""){
+                        string += " / ";
                     }
-                    string+="Cloud";
+                    string += "Cloud";
                 }
 
                 if(!map.shortestPath(user.getCurrentLocation(),location,VehicleType.CAR).isEmpty()){
-                    if(string!=""){
-                        string+=" / ";
+                    if(string != ""){
+                        string += " / ";
                     }
-                    string+="Car";
+                    string += "Car";
                 }
 
-                if(string!=""){
-                    System.out.println(" ---> " + counter + ". " + coloredLocationName(location,user) + " (" + string + ")");
+                if(string != ""){
+                    System.out.println("---> " + Colors.LIGHT_CYAN + (location.getId() + 1) + ". " + Colors.RESET + coloredLocationName(location,user) + " (" + string + ")");
                 }
-                counter++;
             }
         }
 
@@ -141,9 +137,7 @@ public class Display {
         System.out.println(" |________________________C_L_O_U_D_________________________|" + Colors.RESET);
     }
 
-
-
-
+    // MENU
 
     public int choice(Scanner sc){
         String string = sc.nextLine();
@@ -231,18 +225,44 @@ public class Display {
     }
 
     public void displayTutorial(){
-        /*
-        this.conseilsEnnemis.add("Évite de rester sur les zones où un ennemi arrive.");
-        this.conseilsArgent.add("Économise ton argent pour acheter des objets utiles.");
-        this.conseilsArgent.add("Gagne de location'argent en te déplaçant ou passivement en attendant.");
-        this.conseilsArgent.add("Le stock de la boutique est limité, tu peux cependant acheter autant de capsules que tu veux.");
-        
-        this.conseilsSurvie.add("Couvre toi s'il fait trop froid.");
-        this.conseilsDeplacement.add("Certains chemins ne sont accessibles qu'avec certains moyens de transport.");
-        this.conseilsSurvie.add("Mange régulièrement pour maintenir ton récupérer des PV.");
-        this.conseilsSurvie.add("Survie pendant 5 min pour gagner");
-        */
-       System.out.println("Le jeu simule location'arc frizer de db..., si on se deplace on gagne de location argent et notre faim augmente ...");
+       System.out.println(Colors.LIGHT_CYAN + "->" + Colors.RESET + " You are a namekian that wants to survive during Frieza's invasion. Your goal is to go through the events until goku arrives to defeat this monster");
+
+       System.out.println(Colors.LIGHT_CYAN + "\n-> Shop" + Colors.RESET);
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " There are 3 types of items that can be bought from the shop : ");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Gears :" + Colors.RESET + " That can help you resist attacks from enemies");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Foods :" + Colors.RESET + " That can help you reduce your hunger");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Vehicles :" + Colors.RESET + " That can help you visit other locations");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Each item costs a certain amount of zenis that you can buy with your money");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " When you buy an item it disappears from the shop except for the capsules");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " The capsules give you a random item from the shop according to their colors");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " The items you buy are added to your inventory, that you can equip later");
+
+       System.out.println(Colors.LIGHT_CYAN + "\n-> Map" + Colors.RESET);
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " The map represents the namek planet with different locations");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Each location is linked to others by paths that can be taken with specific types of vehicles");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " When you make a journey you automatically take the shortest path");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You can choose to go through another location while making the journey");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You gain a certain amount of money for each journey you make");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your hunger rate increases with each journey you make");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You can't take journeys that can result on increasing your hunger rate above 100 %");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You need the appropriate vehicle to go to a specific location");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " On the map, if there aren't any label on the line linking 2 locations, it means that the path can be taken with any vehicles excpect on foot");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You can't visit condemned locations");
+
+       System.out.println(Colors.LIGHT_CYAN + "\n-> Events" + Colors.RESET);
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " There are 4 types of events : ");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Story :" + Colors.RESET + " Follows the main plot. You will need to finish it in order to survive");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Danger :" + Colors.RESET + " Causes the condemnation of some locations. You must escape from the condemned locations to survive");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Bonus :" + Colors.RESET + " Gives you a certain amount of money");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Mallus :" + Colors.RESET + " Takes from you a certain amount of money");
+       System.out.println(Colors.LIGHT_PURPLE + "----> Attack :" + Colors.RESET + " Targets you. You will need a full outfit (head, top, and bottom gears) otherwise you will die. Even if you survive, you loose your outfit");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " The types of events are choosen randomly");
+       System.out.println(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " You must go through events until you finish the story (Goku arrives to defeat Frieza and save namekians)");
+    }
+
+    public void displayTutorialMenu(){
+        displayMenu(Arrays.asList("Tutorial"));
+        displayTutorial();
     }
 
     public void displayMainMenu(){
@@ -253,7 +273,8 @@ public class Display {
             "2 - Shop",
             "3 - Profile",
             "4 - Map",
-            "5 - Events"
+            "5 - Events",
+            "6 - Tutorial"
         );
 
         displayMenu(menu);

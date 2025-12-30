@@ -11,11 +11,10 @@ public class HackatonjrConsole {
         GameMap map = new GameMap();
         Events events = new Events(map);
         Shop shop = new Shop();
-        User user = new User("", 100000.0f, new ArrayList<>(), 0, new Outfit(null, null, null), null, map.getLocations().get(0));
+        User user = new User("", 20000.0f, new ArrayList<>(), 0, new Outfit(null, null, null), null, map.getLocations().get(0));
 
-        final int EXIT = 0, BACK = 1, INVENTORY = 1, SHOP = 2, PROFILE = 3, MAP = 4, EVENT = 5, SORT_PRICE_ASCENDING = 2, SORT_PRICE_DESCENDING = 3, SORT_NAME_ALPHABETICAL = 4, SORT_NAME_REVERSE_ALPHABETICAL = 5, BUY = 6, EQUIP = 2, MOVEMEMENT = 2, YES = 1, NO = 0;
+        final int EXIT = 0, BACK = 1, INVENTORY = 1, SHOP = 2, PROFILE = 3, MAP = 4, EVENT = 5, TUTORIAL = 6, SORT_PRICE_ASCENDING = 2, SORT_PRICE_DESCENDING = 3, SORT_NAME_ALPHABETICAL = 4, SORT_NAME_REVERSE_ALPHABETICAL = 5, BUY = 6, EQUIP = 2, MOVEMEMENT = 2, YES = 1, NO = 0;
         int choice = -1, choice2 = -1, index = -1, index2 = -1, response = -1;
-        Stockable equipment;
         boolean death = false;
 
         display.displayCreation(user,sc);
@@ -27,31 +26,31 @@ public class HackatonjrConsole {
             display.displayMainMenu();
 
             do{
-                System.out.print("--> Your choice : ");
+                System.out.print(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your choice : ");
                 choice = display.choice(sc);
                 switch (choice) {
                     case INVENTORY:
                         display.displayInventoryMenu(user);
                         do{
-                            System.out.print("--> Your choice : ");
+                            System.out.print(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your choice : ");
                             choice2 = display.choice(sc);
                             switch(choice2){
                                 case EQUIP:
                                     if(user.getInventory().size() <= 0){
-                                        System.out.println("!!! You have no items to equip !");
+                                        System.out.println(Colors.LIGHT_RED + "!!!" + Colors.RESET + " You have no items to equip");
                                     }
                                     else{
                                         do{
-                                            System.out.print("----> Type the number of the item you want to equip : ");
+                                            System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Type the number of the item you want to equip : ");
                                             index = display.choice(sc);
                                         }while(index < 1 || index > user.getInventory().size());
-                                        equipment = user.getInventory().get(index - 1);
+                                        Stockable equipment = user.getInventory().get(index - 1);
 
                                         if(user.equip(user.getInventory().get(index - 1)) == true){
-                                            System.out.print("- The item '" + equipment.getName() + "' was ");
+                                            System.out.print(Colors.LIGHT_CYAN + "->" + Colors.RESET + " The item " + Colors.LIGHT_CYAN + "< " + equipment.getName() + " >" + Colors.RESET + " was ");
                                         }
                                         else{
-                                            System.out.print("- The item '" + equipment.getName() + "' is already ");
+                                            System.out.print(Colors.LIGHT_CYAN + "->" + Colors.RESET + " The item " + Colors.LIGHT_CYAN + "< " + equipment.getName() + " >" + Colors.RESET + " is already ");
                                         }
 
                                         if(equipment instanceof Food){
@@ -77,7 +76,7 @@ public class HackatonjrConsole {
                     case SHOP:
                         do{
                             display.displayShopMenu(shop);
-                            System.out.print("--> Your choice : ");
+                            System.out.print(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your choice : ");
                             choice2 = display.choice(sc);
                             switch(choice2){
                                 case SORT_PRICE_ASCENDING:
@@ -98,19 +97,19 @@ public class HackatonjrConsole {
 
                                 case BUY:
                                     do{
-                                        System.out.print("----> Type the number of the item you want to buy : ");
+                                        System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Type the number of the item you want to buy : ");
                                         index = display.choice(sc);
                                     }while(index < 1 || index > shop.getStock().size());
                                     shop.addToCart(shop.getStock().get(index-1));
 
                                     do{
                                         do{
-                                            System.out.print("- Do you want to add any item ? (1 : Yes / 0 : No) : ");
+                                            System.out.print(Colors.LIGHT_CYAN + "->" + Colors.RESET + " Do you want to add any item ? (1 : Yes / 0 : No) : ");
                                             response = display.choice(sc);
                                         }while(response != YES && response != NO);
                                         if(response == YES){
                                             do{
-                                                System.out.print("----> Type the number of the item you want to add to the cart : ");
+                                                System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Type the number of the item you want to add to the cart : ");
                                                 index = display.choice(sc);
                                             }while(index < 1 || index > shop.getStock().size() || (!(shop.getStock().get(index-1) instanceof Capsule) && shop.getCart().contains(shop.getStock().get(index-1))));
                                             shop.addToCart(shop.getStock().get(index-1));
@@ -118,10 +117,10 @@ public class HackatonjrConsole {
                                     }while(response == YES);
 
                                     if(shop.buyCartStockables(user) == true){
-                                        System.out.println("- The purchase was successful");
+                                        System.out.println(Colors.LIGHT_GREEN + "\n!!!" + Colors.RESET + " The purchase was successful");
                                     }
                                     else{
-                                        System.out.println("!!! You don't have enough money to make the purchase");
+                                        System.out.println(Colors.LIGHT_RED + "\n!!!" + Colors.RESET + " You don't have enough money to make the purchase");
                                     }
                                     
                                     break;
@@ -139,7 +138,7 @@ public class HackatonjrConsole {
                     case PROFILE:
                         display.displayProfileMenu(user);
                         do{
-                            System.out.print("--> Your choice : ");
+                            System.out.print(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your choice : ");
                             choice2 = display.choice(sc);
                             switch(choice2){
                                 case BACK:
@@ -155,7 +154,7 @@ public class HackatonjrConsole {
                     case MAP:
                         display.displayMapMenu(map,user);
                         do{
-                            System.out.print("--> Your choice : ");
+                            System.out.print(Colors.LIGHT_CYAN + "-->" + Colors.RESET + " Your choice : ");
                             choice2 = display.choice(sc);
                             switch(choice2){
                                 case BACK:
@@ -167,17 +166,17 @@ public class HackatonjrConsole {
 
                                 case MOVEMEMENT:
                                     do{
-                                        System.out.print("----> Type the number of the location you want to visit : ");
+                                        System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Type the number of the location you want to visit : ");
                                         index = display.choice(sc);
                                     }while(index < 1 || index > map.getLocations().size());
 
                                     if(user.getVehicle() == null){
-                                        System.out.println("\n!!! You can't travel without any vehicle");
+                                        System.out.println(Colors.LIGHT_RED + "\n!!!" + Colors.RESET + " You can't travel without any vehicle");
                                         break;
                                     }
 
                                     do{
-                                        System.out.print("----> Do you want to go through a specific location ? (1 : Yes / 0 : No) : ");
+                                        System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Do you want to go through a specific location ? (1 : Yes / 0 : No) : ");
                                         response = display.choice(sc);
                                     }while(response != NO && response != YES);
 
@@ -185,7 +184,7 @@ public class HackatonjrConsole {
 
                                     if(response == YES){
                                         do{
-                                            System.out.print("----> Type the number of the location you want to go through : ");
+                                            System.out.print(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " Type the number of the location you want to go through : ");
                                             index2 = display.choice(sc);
                                         }while(index2 < 1 || index2 > map.getLocations().size());
                                         locations = map.shortestPathWithStop(user.getCurrentLocation(), map.getLocations().get(index2 - 1), map.getLocations().get(index - 1), user.getVehicle().getType());
@@ -195,30 +194,30 @@ public class HackatonjrConsole {
                                     }
 
                                     if(locations.isEmpty()){
-                                        System.out.println("\n!!! You couldn't visit '" + map.getLocations().get(index - 1).getName() + "'\nCause : No path leads to there");
+                                        System.out.println(Colors.LIGHT_RED + "\n!!!" + Colors.RESET + " You couldn't visit "+ Colors.LIGHT_CYAN + "< " + map.getLocations().get(index - 1).getName() + " >" + Colors.RESET + " because there isn't any path that leads to there");
                                     }
                                     else{
                                         Float distanceTraveled = map.totalDistancePaths(locations, user.getVehicle().getType());
                                         Float travelTime = user.getVehicle().getTravelTime(distanceTraveled);
                                         int hunger = (int) ((distanceTraveled*100)/map.totalDistancePaths(map.getLocations(),VehicleType.CAR));
-                                        float money = 500 * locations.size();
+                                        float money = 500 * (locations.size() - 1);
                                         //The user gains 500 for each location visited
                                         if(hunger + user.getHunger() >= 100){
-                                            System.out.println("\n!!! You can't visit " + map.getLocations().get(index - 1).getName() + "\nCause : You have a hunger rate of " + user.getHunger() + " % and if you make this journey, your hunger rate will become " + (hunger + user.getHunger()) + " % resulting of your death");
+                                            System.out.println(Colors.LIGHT_RED + "\n!!!" + Colors.RESET + " You can't visit "+ Colors.LIGHT_CYAN + "< " + map.getLocations().get(index - 1).getName() + " >" + Colors.RESET + " because You have a hunger rate of " + user.getHunger() + " %, and if you make this journey, your hunger rate will increase to " + (hunger + user.getHunger()) + " % resulting from your death");
                                         }
                                         else{
-                                            System.out.println("\n- You have passed through the following locations (Distance traveled = " + distanceTraveled + " km / Temps du trajet = " + travelTime + " hours) : ");
+                                            System.out.println(Colors.LIGHT_CYAN + "\n-->" + Colors.RESET + " You have passed through the following locations (Distance traveled = " + Colors.LIGHT_CYAN + distanceTraveled + " km" + Colors.RESET + " / Temps du trajet = " + Colors.LIGHT_CYAN + travelTime + " hours" + Colors.RESET + ") : ");
                                             for(Location location : locations){
-                                                System.out.println("--- " + location.getName());
+                                                System.out.println(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " " + location.getName());
                                             }
                                             user.setCurrentLocation(map.getLocations().get(index - 1));
-                                            System.out.println("\n- The journey increased your hunger rate from " + user.getHunger() + " % to " + (hunger + user.getHunger()) + " %");
+                                            System.out.println(Colors.LIGHT_YELLOW + "\n!!!" + Colors.RESET + " The journey increased your hunger rate from " + user.getHunger() + " % to " + (hunger + user.getHunger()) + " %");
                                             user.addHunger(hunger);
-                                            System.out.println("\n- You gained " + money + " zenis during your journey");
+                                            System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You gained " + money + " zenis during your journey");
                                             user.addMoney(money);
                                         }
                                     }
-                                    System.out.println("\n- You are currently located at : '" + user.getCurrentLocation().getName() + "'");
+                                    System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You are currently located at " + Colors.LIGHT_CYAN + "< " + user.getCurrentLocation().getName() + " >" + Colors.RESET);
                                     break;
                             }
                         }while(choice2 != EXIT && choice2 != BACK && choice2 != MOVEMEMENT);
@@ -231,35 +230,36 @@ public class HackatonjrConsole {
                         
                         switch(event.getType()){
                             case STORY:
-                                System.out.println(Colors.GREEN + "[STORY] " + event.getDescription() + Colors.RESET);
+                                System.out.println(Colors.LIGHT_GREEN + "[STORY] " + event.getDescription() + Colors.RESET);
                                 if(events.getAllEvents().get(EventTypeName.STORY).size() <= 0){
-                                    System.out.println("!!! Congratulations, You survived\n");
+                                    System.out.println(Colors.LIGHT_YELLOW + "\n!!! Congratulations, You survived\n" + Colors.RESET);
                                     sc.close();
                                     return ;
                                 }
                                 break;
 
                             case DANGER:
-                                System.out.println(Colors.RED + "[DANGER] " + event.getDescription() + Colors.RESET);
-                                System.out.println("- Locations targetted : ");
+                                System.out.println(Colors.LIGHT_RED + "[DANGER] " + event.getDescription() + Colors.RESET);
+                                System.out.println(Colors.LIGHT_CYAN + "->" + Colors.RESET + " Locations targetted : ");
                                 for(Location location : event.getTargeLocations()){
-                                    System.out.println("---> " + (location.getId() + 1) + ". " + location.getName());
+                                    System.out.println(Colors.LIGHT_RED + "--> " + (location.getId() + 1) + ". " + Colors.RESET + location.getName());
                                 }
 
+                                System.out.println("");
                                 do{
-                                    System.out.print("\n- You are currently located at '" + user.getCurrentLocation().getName() + "' , do you want to run away ? (1 : Yes / 0 : No) : ");
+                                    System.out.print(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You are currently located at " + Colors.LIGHT_CYAN + "< " + user.getCurrentLocation().getName() + " >" + Colors.RESET + " , do you want to run away ? (1 : Yes / 0 : No) : ");
                                     response = display.choice(sc);
                                 }while(response != NO && response != YES);
 
                                 if(response == NO){
-                                    System.out.println("!!! You decided to not run away from your current location");
+                                    System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You have decided to stay at your current location");
                                 }
                                 else{
                                     do{
                                         display.displayLocations(map,user);
                                         display.displayPaths(map,user);
                                         display.display10Locations(map,user);
-                                        System.out.print("\n-> Type the number of the location tou want to escape to : ");
+                                        System.out.print(Colors.LIGHT_CYAN + "\n->" + Colors.RESET + " Type the number of the location you want to escape to : ");
                                         index = display.choice(sc);
                                     }while(index < 1 || index > map.getLocations().size());
 
@@ -267,7 +267,7 @@ public class HackatonjrConsole {
                                     boolean verif = true;
 
                                     if(user.getVehicle() == null){
-                                        System.out.println("!!! You can't travel without any vehicle");
+                                        System.out.println(Colors.LIGHT_RED + "!!!" + Colors.RESET + " You can't travel without any vehicle");
                                         verif = false;
                                     }
 
@@ -276,30 +276,30 @@ public class HackatonjrConsole {
                                     }
 
                                     if(locations.isEmpty()){
-                                        System.out.println("!!! You couldn't access to this location");
+                                        System.out.println(Colors.LIGHT_RED + "!!!" + Colors.RESET + " You couldn't access to this location");
                                     }
                                     else{
                                         Float distanceTraveled = map.totalDistancePaths(locations, user.getVehicle().getType());
                                         Float travelTime = user.getVehicle().getTravelTime(distanceTraveled);
                                         int hunger = (int) ((distanceTraveled*100)/map.totalDistancePaths(map.getLocations(),VehicleType.CAR));
-                                        money = 500*locations.size();
+                                        money = 500 * (locations.size() - 1);
 
                                         if(hunger + user.getHunger() >= 100){
-                                            System.out.println("\n!!! You can't visit " + map.getLocations().get(index - 1).getName() + "\nCause : You have a hunger rate of " + user.getHunger() + " % and if you make this journey, your hunger rate will become " + (hunger + user.getHunger()) + " % resulting of your death");
+                                            System.out.println(Colors.LIGHT_RED + "\n!!!" + Colors.RESET + " You can't visit "+ Colors.LIGHT_CYAN + "< " + map.getLocations().get(index - 1).getName() + " >" + Colors.RESET + " because You have a hunger rate of " + user.getHunger() + " %, and if you make this journey, your hunger rate will increase to " + (hunger + user.getHunger()) + " % resulting from your death");
                                         }
                                         else{
-                                            System.out.println("\n- You have passed through the following locations (Distance traveled = " + distanceTraveled + " km / Temps du trajet = " + travelTime + " hours) : ");
+                                            System.out.println(Colors.LIGHT_CYAN + "\n-->" + Colors.RESET + " You have passed through the following locations (Distance traveled = " + Colors.LIGHT_CYAN + distanceTraveled + " km" + Colors.RESET + " / Temps du trajet = " + Colors.LIGHT_CYAN + travelTime + " hours" + Colors.RESET + ") : ");
                                             for(Location location : locations){
-                                                System.out.println("--- " + location.getName());
+                                                System.out.println(Colors.LIGHT_CYAN + "---->" + Colors.RESET + " " + location.getName());
                                             }
                                             user.setCurrentLocation(map.getLocations().get(index - 1));
-                                            System.out.println("\n- The journey increased your hunger rate from " + user.getHunger() + " % to " + (hunger + user.getHunger()) + " %");
+                                            System.out.println(Colors.LIGHT_YELLOW + "\n!!!" + Colors.RESET + " The journey increased your hunger rate from " + user.getHunger() + " % to " + (hunger + user.getHunger()) + " %");
                                             user.addHunger(hunger);
-                                            System.out.println("\n- You gained " + money + " zenis during your journey");
+                                            System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You gained " + money + " zenis during your journey");
                                             user.addMoney(money);
                                         }
                                     }
-                                    System.out.println("\n- You are currently located at : '" + user.getCurrentLocation().getName() + "'");
+                                    System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You are currently located at " + Colors.LIGHT_CYAN + "< " + user.getCurrentLocation().getName() + " >" + Colors.RESET);
                                 }
 
                                 death = event.eventEffect(user);
@@ -308,26 +308,26 @@ public class HackatonjrConsole {
                                     death = true;
                                 }
                                 else{
-                                    System.out.println("!!! You survived the danger");
+                                    System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You survived the danger");
                                 }
 
                                 break;
 
                             case BONUS:
                                 death = event.eventEffect(user);
-                                System.out.println(Colors.GREEN + "[BONUS] " + event.getDescription() + (user.getMoney() - money) + " zenis" + Colors.RESET);
+                                System.out.println(Colors.LIGHT_GREEN + "[BONUS] " + event.getDescription() + (user.getMoney() - money) + " zenis" + Colors.RESET);
                                 break;
 
                             case MALLUS:
                                 death = event.eventEffect(user);
-                                System.out.println(Colors.RED + "[MALLUS] " + event.getDescription() + (money - user.getMoney()) + " zenis" + Colors.RESET);
+                                System.out.println(Colors.LIGHT_RED + "[MALLUS] " + event.getDescription() + (money - user.getMoney()) + " zenis" + Colors.RESET);
                                 break;
 
                             case ATTACK:
-                                System.out.println(Colors.RED + "[ATTACK] " + event.getDescription() + Colors.RESET);
+                                System.out.println(Colors.LIGHT_RED + "[ATTACK] " + event.getDescription() + Colors.RESET);
                                 death = event.eventEffect(user);
                                 if(death == false){
-                                    System.out.println("!!! You survived the danger but your outfit was destroyed");
+                                    System.out.println(Colors.LIGHT_YELLOW + "!!!" + Colors.RESET + " You survived the danger but your outfit was destroyed");
                                 }
                                 else{
                                     death = true;
@@ -340,12 +340,16 @@ public class HackatonjrConsole {
                     case EXIT:
                         death = true;
                         break;
+
+                    case TUTORIAL:
+                        display.displayTutorialMenu();
+                        break;
                 }
 
-            }while(death == false && choice2 != EXIT && choice2 != BACK && choice2 != EQUIP && choice2 != MOVEMEMENT && choice != EVENT);
+            }while(death == false && choice != TUTORIAL && choice2 != EXIT && choice2 != BACK && choice2 != EQUIP && choice2 != MOVEMEMENT && choice != EVENT);
             
         }
-        System.out.println("!!! You died\n");
+        System.out.println(Colors.LIGHT_PURPLE + "\n!!! Unfortunately, you died\n" + Colors.RESET);
         sc.close();
         return ;
     }

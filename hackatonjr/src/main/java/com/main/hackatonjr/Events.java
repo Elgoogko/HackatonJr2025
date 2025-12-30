@@ -17,7 +17,9 @@ public class Events {
         this.allevents.put(EventTypeName.STORY,new ArrayList<>());
         this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Gohan, Krillin and Bulma arrived on Namek", new ArrayList<>()));
         this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Vegeta teams up with Gohan and Krillin to find the dragon balls", new ArrayList<>()));
-        this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Goku arrives to battle Frieza", new ArrayList<>()));
+        this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Guru unlocked the hidden powers of Gohan and Krillin", new ArrayList<>()));
+        this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Recoome defeats Vegeta, Gohan and Krillin", new ArrayList<>()));
+        this.allevents.get(EventTypeName.STORY).add(new Event(EventTypeName.STORY, 0, "Goku arrives to defeat Frieza", new ArrayList<>()));
 
         this.allevents.put(EventTypeName.DANGER,new ArrayList<>());
         this.allevents.get(EventTypeName.DANGER).add(new Event(EventTypeName.DANGER, 60, "Frieza launches an attack", map.randomLocations()));
@@ -31,9 +33,9 @@ public class Events {
         this.allevents.get(EventTypeName.MALLUS).add(new Event(EventTypeName.MALLUS, 0, "You lost ", new ArrayList<>()));
 
         this.allevents.put(EventTypeName.ATTACK,new ArrayList<>());
-        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Frieza attackes you", new ArrayList<>()));
-        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Vegeta attackes you", new ArrayList<>()));
-        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Ginyu attackes you", new ArrayList<>()));
+        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Frieza attacks you", new ArrayList<>()));
+        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Vegeta attacks you", new ArrayList<>()));
+        this.allevents.get(EventTypeName.ATTACK).add(new Event(EventTypeName.ATTACK, 60, "Ginyu attacks you", new ArrayList<>()));
     }
 
     public EnumMap<EventTypeName, ArrayList<Event>> getAllEvents(){
