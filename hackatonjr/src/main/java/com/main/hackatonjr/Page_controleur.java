@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class Page_controleur {
     @Autowired
-    private Catalogue catalogue;
+    private Catalog catalogue;
     @Autowired
-    private Carte carte;
+    private GameMap carte;
 
     @RequestMapping("/")
     public String index() {

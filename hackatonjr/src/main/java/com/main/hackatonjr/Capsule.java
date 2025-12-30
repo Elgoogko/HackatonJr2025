@@ -1,35 +1,47 @@
 package com.main.hackatonjr;
 
-enum Couleur{ BLEU, ROUGE, VERT}
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Capsule extends Stockables{
+enum CapsuleColor {
+    BLUE,//Gears
+    RED,//Vehicles
+    GREEN//Foods
+}
+
+public class Capsule extends Stockable {
     
-    private Couleur couleur;
+    private CapsuleColor color;
 
-    public Capsule(int id, float prix, Couleur couleur, String nom) {
-        super(id, nom, prix);
-        this.couleur = couleur;
+    public Capsule(int id, String name , float price, CapsuleColor color){
+        super(id,name,price);
+        this.color = color;
     }
 
-    public Couleur getCouleur() {
-        return couleur;
+    public CapsuleColor getColor(){
+        return color;
     }
-    //TODO
-    public Stockables getObjetAleatoire(){
-        switch (this.couleur) {
-            case BLEU:
-                
-                break;
-            case ROUGE:
-                break;
-            case VERT:
-                break;
-            default:
-                //pas cool 
-                break;
+
+    public void setColor(CapsuleColor color){
+        this.color = color;
+    }
+
+    //Get a random object from the shop depending on the capsule's color
+    public Stockable getRandomObject(int id){
+        Catalog catalog = new Catalog();
+
+        switch (this.color) {
+            case BLUE:
+                Gear gear = catalog.gears.get(ThreadLocalRandom.current().nextInt(catalog.gears.size()));
+                return new Gear(id,gear.getName(),gear.getPrice(),gear.getType());
+
+            case RED:
+                Vehicle vehicle = catalog.vehicles.get(ThreadLocalRandom.current().nextInt(catalog.vehicles.size()));
+                return new Vehicle(id,vehicle.getName(),vehicle.getPrice(),vehicle.getSpeed(),vehicle.getType());
+
+            case GREEN:
+                Food food = catalog.foods.get(ThreadLocalRandom.current().nextInt(catalog.foods.size()));
+                return new Food(id,food.getName(),food.getPrice(),food.getHunger());
         }
         return null;
     }
-
-
 }
