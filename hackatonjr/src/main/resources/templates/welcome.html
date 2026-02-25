@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HackatonJr 2025</title>
+        <link rel="stylesheet" th:href="@{/style.css}">
+
+        <!-- <script th:src="@{/js/game.js}"></script> -->
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="infos">
+                <div class="section">Informations</div>
+                <div class="paragraph">
+                    <div th:text="${game.user.name}"></div>
+                    <div class="stats">
+                        <div id="money"> <span th:text="${game.user.money}"></span> zénis </div>
+                        <div id="hunger"> Hunger : <span th:text="${game.user.hunger}"></span> % </div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Outfit</div>
+                        <div> Head : <span id="head" th:text="${game.user.outfit.head != null ? game.user.outfit.head.name : 'None'}"></span> </div>
+                        <div> Top : <span id="top" th:text="${game.user.outfit.top != null ? game.user.outfit.top.name : 'None'}"></span> </div>
+                        <div> Bottom : <span id="bottom" th:text="${game.user.outfit.bottom != null ? game.user.outfit.bottom.name : 'None'}"></span> </div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Current location</div>
+                        <div> <span th:text="${game.user.getCurrentLocation().name}"></span></div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Vehicle</div>
+                        <div id="vehicle"> <span th:text="${game.user.vehicle != null ? game.user.vehicle.name : 'None'}"></span></div>
+                    </div>
+                    <div class="buttons">
+                        <button name="button" id="inventoryButton" class="button" onclick="show('inventory')">I</button>
+                        <button name="button" id="shopButton" class="button" onclick="show('shop')">S</button>
+                        <button name="button" id="mapButton" class="disabled" disabled onclick="show('map')">M</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div name="display" id="shop" class="game hidden">
+                <div class="section all">Shop</div>
+                <ul>
+                    <li th:each="stockable: ${game.shop.stock}" class="stockable" th:data-extra="${stockable.price}" th:id="|stockable_${stockable.id}|" th:onclick="|select('stockable_${stockable.id}')|"> 
+                        <img th:src="@{/Data/namek.jpg}">
+
+                        <span th:text="${stockable.name}"></span>
+                    </li>
+                </ul>
+
+                <button id="pay" class="pay" onclick="pay()">Pay 0 zénis</button>
+                <div id="error" hidden>You don't have enough money to buy the items !</div>
+            </div>
+
+            <div name="display" id="inventory" class="game hidden">
+                <div class="section all">Inventory</div>
+                <ul id="inventoryList">
+                    <li th:each="stockable: ${game.user.inventory}" class="stockable2" th:id="|stockable_${stockable.id}|"> 
+                        <img th:src="@{/Data/namek.jpg}">
+
+                        <div class="container2">
+                            <span th:text="${stockable.name}"></span>
+                            <button th:class="${(game.user.vehicle != null && stockable.id == game.user.vehicle.id) || (game.user.outfit.top != null && stockable.id == game.user.outfit.top.id) || (game.user.outfit.head != null && stockable.id == game.user.outfit.head.id) || (game.user.outfit.bottom != null && stockable.id == game.user.outfit.bottom.id) ? 'equiped' : 'equip'}" th:onclick="|equip('stockable_${stockable.id}')|" th:attr="data-extra=${game.type(stockable)}"> <span th:text="${(game.user.vehicle != null && stockable.id == game.user.vehicle.id) || (game.user.outfit.top != null && stockable.id == game.user.outfit.top.id) || (game.user.outfit.head != null && stockable.id == game.user.outfit.head.id) || (game.user.outfit.bottom != null && stockable.id == game.user.outfit.bottom.id) ? 'Equiped' : 'Equip'}"></span> </button>
+                        </div>
+
+                        
+                    </li>
+                    
+                </ul>
+                <div id="errorEquip" hidden>You couldn't equip the item !</div>
+            </div>
+
+            <div name="display" id="map" class="game">
+                <div class="section all">Map</div>
+
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function updatePrice(){
+                var elements = document.getElementsByClassName("selected");
+                var price = 0;
+
+                for(var i = 0; i < elements.length; i++){
+                    price += parseFloat(elements[i].dataset.extra);
+                }
+
+                var button = document.getElementById("pay");
+                button.textContent = "Pay " + price + " zénis";
+            }
+
+            function select(idStockable){
+                var element = document.getElementById(idStockable);
+                if(element.classList.contains("selected")){
+                    element.classList.remove("selected");
+                }
+                else{
+                    element.classList.add("selected");
+                }
+                updatePrice();
+            }
+
+            async function pay(){
+                var stockableIds = "";
+                var elements = document.getElementsByClassName("stockable");
+                var money = document.getElementById("money");
+                var price = 0;
+
+                var inventorySize = document.getElementsByClassName("stockable2").length;
+
+                for(var i = 0; i < elements.length; i++){
+                    if(elements[i].classList.contains("selected")){
+                        price += parseFloat(elements[i].dataset.extra);
+                        if(i == elements.length - 1){
+                            stockableIds += i;
+                        }
+                        else{
+                            stockableIds += i + "_";
+                        }
+                    }
+                }
+
+                document.getElementById("error").hidden = true;
+
+                if(stockableIds == ""){
+                    return ;
+                }
+
+                if(price > parseFloat(money.textContent)){
+                    document.getElementById("error").hidden = false;
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/pay',{
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'text/plain;charset=UTF-8',
+                        },
+                        body: stockableIds
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const user = await response.json();
+
+                    if(user == null){
+                        document.getElementById("error").hidden = false;
+                        return ;
+                    }
+
+                    for(var i = elements.length - 1; i >= 0; i--){
+                        if(elements[i].classList.contains("selected")){
+                            if(i > 2){
+                                elements[i].remove();
+                            }
+                            else{
+                                elements[i].classList.remove("selected");
+                            }
+                        }
+                    }
+
+                    for(var i = inventorySize; i < user.inventory.length; i++){
+                        var item = document.createElement("li");
+                        item.classList.add("stockable2");
+                        item.id = "stockable_" + user.inventory[i].id;
+                        item.innerHTML = `
+                            <img src="/Data/namek.jpg"> 
+                            <div class="container2"> 
+                                <span>${user.inventory[i].name}</span> 
+                                <button class="equip" onclick="equip('stockable_${user.inventory[i].id}')" data-extra=""> 
+                                    <span>Equip</span> 
+                                </button> 
+                            </div>`;
+                        document.getElementById("inventoryList").appendChild(item);
+                    }
+
+                    updatePrice();
+
+                    var moneyElement = document.getElementById("money");
+                    moneyElement.textContent = user.money + " zénis";
+
+                } catch (e) {
+                    console.error(e);
+                }
+
+            }
+
+            async function equip(id){
+                var stockableId = "";
+                var elements = document.getElementsByClassName("stockable2");
+
+                for(var i = 0; i < elements.length; i++){
+                    if(id == elements[i].id){
+                        stockableId = i;
+                        break;
+                    }
+                }
+
+                document.getElementById("errorEquip").hidden = true;
+
+                try{
+                    const response = await fetch('/equip',{
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'text/plain;charset=UTF-8',
+                        },
+                        body: String(stockableId)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const message = await response.text();
+
+                    if(message == "-1"){
+                        document.getElementById("errorEquip").hidden = false;
+                        return ;
+                    }
+
+                    var type = message.split('_')[0];
+
+                    var element = document.getElementById(id);
+
+                    if(type == "Food"){
+                        document.getElementById("hunger").textContent = "Hunger : " + message.split('_')[1] + " %";
+                        element.remove();
+                    }
+                    else{
+                        var lower = type.toLowerCase();
+                        document.getElementById(lower).textContent = message.split('_')[1];
+                        var buttons = document.getElementsByClassName("equiped");
+
+                        for(var i = 0; i < buttons.length; i++){
+                            if(buttons[i].dataset.extra == lower){
+                                buttons[i].textContent = "Equip";
+                                buttons[i].disabled = false;
+                                buttons[i].dataset.extra = "";
+                                buttons[i].classList.add("equip");
+                                buttons[i].classList.remove("equiped");
+                            }
+                        }
+
+                        var button = element.querySelector("button");
+
+                        button.textContent = "Equiped";
+                        button.dataset.extra = lower;
+                        button.disabled = true;
+                        button.classList.add("equiped");
+                        button.classList.remove("equip");
+                        
+                    }
+
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            function show(id){
+                var element = document.getElementById(id);
+                var elementButton = document.getElementById(id + "Button");
+
+                var display = document.getElementsByName("display");
+                var buttons = document.getElementsByName("button");
+
+                for(var i = 0; i < display.length; i++){
+                    if(!display[i].classList.contains("hidden")){
+                        display[i].classList.add("hidden");
+                    }
+                }
+
+                for(var i = 0; i < buttons.length; i++){
+                    if(buttons[i].disabled){
+                        buttons[i].disabled = false;
+                        buttons[i].classList.remove("disabled");
+                        buttons[i].classList.add("button");
+                    }
+                }
+
+                element.classList.remove("hidden");
+                elementButton.disabled = true;
+                elementButton.classList.add("disabled");
+                elementButton.classList.remove("button");
+            }
+        </script>
+
+    </body>
+</html>
