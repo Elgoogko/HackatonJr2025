@@ -60,7 +60,7 @@ public class GameController {
             return new User(user.getName(),user.getMoney(),user.getInventory(),user.getHunger(),user.getOutfit(),user.getVehicle(),null);
         }
         else{
-            return null;
+            return new User(null,0,null,0,null,null,null);
         }
     }
 
@@ -93,5 +93,55 @@ public class GameController {
                 return "Bottom_" + stockable.getName();
             }
         }
+    }
+
+
+    @PostMapping("/move")
+    @ResponseBody
+    public User move(@RequestBody String id, @ModelAttribute("game") Game game){
+        Location loc = game.getMap().getLocations().get(Integer.parseInt(id));
+
+        GameMap map = game.getMap();
+        User user = game.getUser();
+
+        ArrayList<Location> locations = map.shortestPath(user.getCurrentLocation(), loc, user.getVehicle().getType());
+
+        if(locations.isEmpty()){
+            return new User(null,0,null,0,null,null,null);
+        }
+
+        Float distanceTraveled = map.totalDistancePaths(locations, user.getVehicle().getType());
+        int hunger = (int) ((distanceTraveled*100)/map.totalDistancePaths(map.getLocations(),VehicleType.CAR));
+        float money = 500 * (locations.size() - 1);
+        //The user gains 500 for each location visited
+        if(hunger + user.getHunger() >= 100){
+            return new User(null,0,null,0,null,null,null);
+        }
+        else{
+            user.setCurrentLocation(loc);
+            user.addHunger(hunger);
+            user.addMoney(money);
+        }
+
+        return new User(user.getName(),user.getMoney(),user.getInventory(),user.getHunger(),user.getOutfit(),user.getVehicle(),new Location(-1,user.getCurrentLocation().getName(),"",null,null));
+    }
+
+
+    @GetMapping("/locations")
+    @ResponseBody
+    public ArrayList<String> getLocations(@ModelAttribute("game") Game game){
+        ArrayList<String> locationsId = new ArrayList<>();
+
+        ArrayList<Location> allLocations = game.getMap().getLocations();
+
+        Location current = game.getUser().getCurrentLocation();
+
+        for(int i = 0; i < allLocations.size(); i++){
+            if(allLocations.get(i) != current && !game.getMap().shortestPath(current, allLocations.get(i), game.getUser().getVehicle().getType()).isEmpty()){
+                locationsId.add("" + allLocations.get(i).getId());
+            }
+        }
+
+        return locationsId;
     }
 }

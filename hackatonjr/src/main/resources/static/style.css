@@ -120,7 +120,9 @@ ul {
 }
 
 ul li {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
 }
 
@@ -130,11 +132,25 @@ ul li img {
     width: 100px;
 }
 
-.stockable, .stockable2 {
+.stockable, .stockable2, .location {
     width: 100px;
     border: 2px solid black;
     margin-bottom: 5px;
     cursor: pointer;
+}
+
+.location {
+    margin: 5px 5px 8px 5px;
+}
+
+.green {
+    background-color: #2a7c72;
+    color: #f3f4b1;
+}
+
+.red {
+    background-color: rgb(111, 26, 26);
+    color: #f3f4b1;
 }
 
 .stockable2 {
@@ -204,7 +220,7 @@ ul li img {
     gap: 6px;
 }
 
-.button, .disabled {
+.button, .disabled, .here {
     font-size: 20px;
     font-family: papyrus;
     background-color: #2a7c72;
@@ -227,4 +243,8 @@ ul li img {
 
 .all {
     width: 100%;
+}
+
+span {
+    text-align: center;
 }
