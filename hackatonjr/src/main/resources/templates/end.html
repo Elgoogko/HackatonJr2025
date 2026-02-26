@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HackatonJr 2025</title>
+        <link rel="stylesheet" th:href="@{/style.css}">
+        
+        <!-- <script th:src="@{/js/game.js}"></script> -->
+    </head>
+
+    <body>
+
+        <div class="center">
+            <div class="nameForm">
+                <div th:text="${game.events.getAllEvents().get(T(com.main.hackatonjr.EventTypeName).STORY).size() > 0 ? 'Game Over' : 'You survived'}"></div>
+                <a href="/restart" class="button auto">Restart</a>
+            </div>
+        </div>
+    </body>
+</html>

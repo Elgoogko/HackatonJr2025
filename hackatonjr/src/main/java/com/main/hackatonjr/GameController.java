@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 
 @Controller
@@ -104,6 +105,10 @@ public class GameController {
         GameMap map = game.getMap();
         User user = game.getUser();
 
+        if(user.getVehicle() == null){
+            return new User(null,0,null,0,null,null,null);
+        }
+
         ArrayList<Location> locations = map.shortestPath(user.getCurrentLocation(), loc, user.getVehicle().getType());
 
         if(locations.isEmpty()){
@@ -137,11 +142,64 @@ public class GameController {
         Location current = game.getUser().getCurrentLocation();
 
         for(int i = 0; i < allLocations.size(); i++){
-            if(allLocations.get(i) != current && !game.getMap().shortestPath(current, allLocations.get(i), game.getUser().getVehicle().getType()).isEmpty()){
+            if(allLocations.get(i).getId() != current.getId() && game.getUser().getVehicle() != null && !game.getMap().shortestPath(current, allLocations.get(i), game.getUser().getVehicle().getType()).isEmpty()){
                 locationsId.add("" + allLocations.get(i).getId());
             }
         }
 
+        if(locationsId.isEmpty()){
+            locationsId.add("-1");
+            return locationsId;
+        }
         return locationsId;
+    }
+
+    @GetMapping("/event")
+    @ResponseBody
+    public Event event(@ModelAttribute("game") Game game){
+        game.setActualEvent(game.getEvents().getRandomEvent());
+        Event event = game.getActualEvent();
+        ArrayList<Location> locations = new ArrayList<>();
+        for(int i = 0; i < event.getTargeLocations().size(); i++){
+            Location loc = event.getTargeLocations().get(i);
+            locations.add(new Location(loc.getId(),loc.getName(),loc.getDescription(),null,loc.getCoordinates()));
+        }
+        return new Event(event.getType(),event.getTriggerTimeSec(),event.getDescription(),locations);
+    }
+
+    @GetMapping("/triggerEvent")
+    @ResponseBody
+    public User triggerEvent(@ModelAttribute("game") Game game){
+        Event event = game.getActualEvent();
+        game.setActualEvent(null);
+
+        if(event.getType() == EventTypeName.STORY){
+            if(game.getEvents().getAllEvents().get(EventTypeName.STORY).size() <= 0){
+                game.setEnd(true);
+            }
+        }
+        else{
+            game.setEnd(event.eventEffect(game.getUser()));
+        }
+
+        User user = game.getUser();
+        return new User(user.getName(),user.getMoney(),user.getInventory(),user.getHunger(),user.getOutfit(),user.getVehicle(),null);
+    }
+
+    @GetMapping("/endGame")
+    @ResponseBody
+    public boolean endGame(@ModelAttribute("game") Game game){
+        return game.end();
+    }
+
+    @GetMapping("/end")
+    public String end(){
+        return "end";
+    }
+
+    @GetMapping("/restart")
+    public String restart(SessionStatus status){
+        status.setComplete();
+        return "redirect:/index";
     }
 }

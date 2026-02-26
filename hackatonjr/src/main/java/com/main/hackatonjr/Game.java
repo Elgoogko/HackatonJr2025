@@ -5,6 +5,8 @@ public class Game {
     private Shop shop;
     private GameMap map;
     private Events events;
+    private boolean end = false;
+    private Event actualEvent = null;
 
     public Game(User user, Shop shop, GameMap map, Events events){
         this.user = user;
@@ -45,5 +47,21 @@ public class Game {
                 return "bottom";
             }
         }
+    }
+
+    public boolean end(){
+        return this.end;
+    }
+
+    public void setEnd(boolean bool){
+        this.end = bool;
+    }
+
+    public Event getActualEvent(){
+        return this.actualEvent;
+    }
+
+    public void setActualEvent(Event event){
+        this.actualEvent = event;
     }
 }
