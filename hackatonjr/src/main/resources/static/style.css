@@ -41,6 +41,12 @@ body {
     font-weight: bold;
 }
 
+.centerGame {
+    display: flex;
+    justify-content: center;
+    height: auto;
+}
+
 .container {
     width: 100%;
     height: auto;
@@ -48,6 +54,12 @@ body {
     font-size: 20px;
     font-family: papyrus;
     gap: 5px;
+}
+
+@media (min-width:1280px) {
+    .container {
+        width: 1280px;
+    }
 }
 
 .infos, .game {
@@ -225,7 +237,7 @@ ul li img {
     gap: 6px;
 }
 
-.button, .disabled, .here {
+.button, .disabled, .here, .leave {
     font-size: 20px;
     font-family: papyrus;
     background-color: #2a7c72;
@@ -254,9 +266,9 @@ span {
     text-align: center;
 }
 
-.event, .timer {
+.event, .timer, .centerMap {
     position: fixed;
-    z-index: 1000;
+    z-index: 600;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -264,25 +276,112 @@ span {
     height: auto;
     flex-direction: column;
     border: 2px solid black;
-    background-color: #2a7c72;
     color: #f3f4b1;
 }
 
-.event {
+.timer {
+    font-size: 22px;
+    background-color: #550000;
+}
+
+.event, .centerMap {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 10px;
+    padding: 20px;
+}
+
+.event {
+    background-color: #2a7c72;
 }
 
 .timer {
     right: 0px;
     bottom: 0px;
-    padding: 5px;
+    padding: 10px;
+    margin: 5px;
 }
 
 .auto {
     width: auto;
     height: auto;
     padding: 5px;
+}
+
+.a {
+    text-decoration: none;
+}
+
+.leave {
+    background-color: #550000;
+    color: #f3f4b1;
+    padding: 5px 15px 5px 15px;
+    border-radius: 10px;
+    width: auto;
+}
+
+.leave:hover {
+    transform: scale(1.1);
+    background-color: #6c0000;
+    color: #f3f4b8;
+}
+
+.end {
+    font-size: 50px;
+    padding: 10px;
+    margin: 5px;
+}
+
+.zenis {
+    font-weight: bold;
+    color: #2a7c72;
+    border-top: 1px solid black;
+}
+
+.selected .zenis {
+    color: black;
+}
+
+.imageMap {
+    width: 90%;
+    height: auto;
+    margin: 5px;
+    border: 2px solid black;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.imageMap:hover {
+    transform: scale(1.02);
+}
+
+.centerMap {
+    background-color: #2a7c72;
+    border: none;
+    width: 700px;
+    padding: 5px 10px 5px 10px;
+    border: 2px solid black;
+    z-index: 500;
+}
+
+@media (max-width:750px) {
+    .centerMap {
+        width: 90%;
+    }
+}
+
+.centerMap .imageMap {
+    width: 100%;
+    transform: none;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 400;
+}
+
+.advice {
+    color: #6c0000;
 }

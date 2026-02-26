@@ -6,16 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>HackatonJr 2025</title>
         <link rel="stylesheet" th:href="@{/style.css}">
-        
-        <!-- <script th:src="@{/js/game.js}"></script> -->
+
+        <script th:src="@{/JavaScript/access.js}" type="text/javascript"></script>
     </head>
+
+    <script type="text/javascript">
+        access('end');
+    </script>
 
     <body>
 
         <div class="center">
             <div class="nameForm">
-                <div th:text="${game.events.getAllEvents().get(T(com.main.hackatonjr.EventTypeName).STORY).size() > 0 ? 'Game Over' : 'You survived'}"></div>
-                <a href="/restart" class="button auto">Restart</a>
+                <div th:text="${game.events.getAllEvents().get(T(com.main.hackatonjr.EventTypeName).STORY).size() > 0 ? 'Game Over' : 'You survived'}" class="username end"></div>
+                <a href="/restart" class="button auto">New Game</a>
             </div>
         </div>
     </body>

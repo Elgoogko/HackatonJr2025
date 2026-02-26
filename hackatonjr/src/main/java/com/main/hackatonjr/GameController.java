@@ -27,7 +27,10 @@ public class GameController {
     }
     
     @GetMapping("/index")
-    public String index() {
+    public String index(@ModelAttribute("game") Game game) {
+        if(game != null && game.getUser().getName() != ""){
+            return "redirect:/game";
+        }
         return "index";
     }
     
@@ -35,12 +38,18 @@ public class GameController {
     @PostMapping("/name")
     public String getName(@RequestParam String name, @ModelAttribute("game") Game game){
         game.getUser().setName(name);
-        return "redirect:/welcome";
+        return "redirect:/game";
     }
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "welcome";
+    @GetMapping("/game")
+    public String game(@ModelAttribute("game") Game game) {
+        if(game == null || game.getUser().getName() == ""){
+            return "redirect:/index";
+        }
+        if(game.end()){
+            return "redirect:/end";
+        }
+        return "game";
     }
 
     @GetMapping("/name")
@@ -164,7 +173,13 @@ public class GameController {
             Location loc = event.getTargeLocations().get(i);
             locations.add(new Location(loc.getId(),loc.getName(),loc.getDescription(),null,loc.getCoordinates()));
         }
-        return new Event(event.getType(),event.getTriggerTimeSec(),event.getDescription(),locations);
+
+        String str = " some zénis";
+
+        if(event.getType() != EventTypeName.BONUS && event.getType() != EventTypeName.MALLUS){
+            str = "";
+        }
+        return new Event(event.getType(),event.getTriggerTimeSec(),event.getDescription() + str,locations);
     }
 
     @GetMapping("/triggerEvent")
@@ -193,7 +208,13 @@ public class GameController {
     }
 
     @GetMapping("/end")
-    public String end(){
+    public String end(@ModelAttribute("game") Game game){
+        if(game == null || game.getUser().getName() == ""){
+            return "redirect:/index";
+        }
+        if(!game.end()){
+            return "redirect:/game";
+        }
         return "end";
     }
 
@@ -201,5 +222,11 @@ public class GameController {
     public String restart(SessionStatus status){
         status.setComplete();
         return "redirect:/index";
+    }
+
+    @GetMapping("/leave")
+    public String leave(@ModelAttribute("game") Game game){
+        game.setEnd(true);
+        return "redirect:/end";
     }
 }

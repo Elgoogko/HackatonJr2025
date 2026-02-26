@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HackatonJr 2025</title>
+        <link rel="stylesheet" th:href="@{/style.css}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+        <script th:src="@{/JavaScript/access.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/display.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/equip.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/event.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/event.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/move.js}" type="text/javascript"></script>
+        <script th:src="@{/JavaScript/pay.js}" type="text/javascript"></script>
+    </head>
+
+    <script type="text/javascript">
+        access('game');
+    </script>
+
+    <body class="centerGame">
+        <div class="container">
+            <div class="infos">
+                <div class="section">Informations</div>
+                <div class="paragraph">
+                    <div th:text="${game.user.name}"></div>
+                    <div class="stats">
+                        <div id="money"> <span th:text="${game.user.money}"></span> zénis </div>
+                        <div id="hunger">Hunger : <span th:text="${game.user.hunger}"></span> %</div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Outfit</div>
+                        <div> Head : <span id="head" th:text="${game.user.outfit.head != null ? game.user.outfit.head.name : 'None'}"></span> </div>
+                        <div> Top : <span id="top" th:text="${game.user.outfit.top != null ? game.user.outfit.top.name : 'None'}"></span> </div>
+                        <div> Bottom : <span id="bottom" th:text="${game.user.outfit.bottom != null ? game.user.outfit.bottom.name : 'None'}"></span> </div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Current location</div>
+                        <div id="current"> <span th:text="${game.user.getCurrentLocation().name}"></span></div>
+                    </div>
+                    <div class="stats">
+                        <div class="underline">Vehicle</div>
+                        <div id="vehicle"> <span th:text="${game.user.vehicle != null ? game.user.vehicle.name : 'None'}"></span></div>
+                    </div>
+                    <div class="buttons">
+                        <button name="button" id="inventoryButton" class="button" onclick="show('inventory')"><i class="fa-solid fa-toolbox"></i></button>
+                        <button name="button" id="shopButton" class="button" onclick="show('shop')"><i class="fa-solid fa-cart-shopping"></i></button>
+                        <button name="button" id="mapButton" class="disabled" disabled onclick="show('map')"><i class="fa-solid fa-map-location-dot"></i></button>
+                    </div>
+
+                    <img th:src="@{/Data/image.png}" class="imageMap" onclick="showMap()">
+
+                    <a href="/leave" class="leave">Leave</a>
+                </div>
+
+            </div>
+
+            <div name="display" id="shop" class="game hidden">
+                <div class="section all">Shop</div>
+                <ul>
+                    <li th:each="stockable: ${game.shop.stock}" class="stockable" th:data-extra="${stockable.price}" th:id="|stockable_${stockable.id}|" th:onclick="|select('stockable_${stockable.id}')|"> 
+                        <img th:src="@{/Data/namek.jpg}">
+
+                        <span th:text="${stockable.name}"></span>
+                        <span class="zenis" th:text="|${stockable.price} zénis|"></span>
+                    </li>
+                </ul>
+
+                <button id="pay" class="pay" onclick="pay()">Pay 0 zénis</button>
+                <div id="error" hidden>You don't have enough money to buy the items !</div>
+            </div>
+
+            <div name="display" id="inventory" class="game hidden">
+                <div class="section all">Inventory</div>
+                <ul id="inventoryList">
+                    <li th:each="stockable: ${game.user.inventory}" class="stockable2" th:id="|stockable_${stockable.id}|"> 
+                        <img th:src="@{/Data/namek.jpg}">
+
+                        <div class="container2">
+                            <span th:text="${stockable.name}"></span>
+                            <button th:class="${(game.user.vehicle != null && stockable.id == game.user.vehicle.id) || (game.user.outfit.top != null && stockable.id == game.user.outfit.top.id) || (game.user.outfit.head != null && stockable.id == game.user.outfit.head.id) || (game.user.outfit.bottom != null && stockable.id == game.user.outfit.bottom.id) ? 'equiped' : 'equip'}" th:onclick="|equip('stockable_${stockable.id}')|" th:attr="data-extra=${game.type(stockable)}"> <span th:text="${(game.user.vehicle != null && stockable.id == game.user.vehicle.id) || (game.user.outfit.top != null && stockable.id == game.user.outfit.top.id) || (game.user.outfit.head != null && stockable.id == game.user.outfit.head.id) || (game.user.outfit.bottom != null && stockable.id == game.user.outfit.bottom.id) ? 'Equiped' : 'Equip'}"></span> </button>
+                        </div>
+
+                        
+                    </li>
+                    
+                </ul>
+                <div id="errorEquip" hidden>You couldn't equip the item !</div>
+            </div>
+
+            <div name="display" id="map" class="game">
+                <div class="section all">Map</div>
+                <ul>
+                    <li th:each="location: ${game.map.locations}" th:class="|location ${game.user.getCurrentLocation() != location && game.user.vehicle != null && game.map.shortestPath(game.user.getCurrentLocation(),location,game.user.vehicle.type) != null ? 'green' : ''} ${location.condemned ? 'red' : ''}|" th:id="|location_${location.id}|" th:onclick="|move('location_${location.id}')|">
+                        <img th:src="@{/Data/namek.jpg}">
+                        <button th:if="${location == game.user.getCurrentLocation()}" class="here"><i class="fa-solid fa-location-dot"></i></button>
+                        <span th:text="${location.name}"></span>
+                    </li>
+                </ul>
+
+                <div id="showMoneyHunger" hidden></div>
+                <div id="errorLocation" hidden>You can't go there !</div>
+                <div id="errorLocation2" hidden>You will die of hunger if you go there !</div>
+            </div>
+
+            <div id="eventAttributs" class="hidden" data-extra="">
+                <div id="eventName" class="section"></div>
+                <div id="eventDescription"></div>
+                <div id="eventAdvice" class="advice"></div>
+            </div>
+
+            <div id="survive" class="event important">
+                <div id="eventName" class="section">IMPORTANT</div>
+                <div id="eventDescription">Survive until goku arrives !</div>
+            </div>
+
+            <div id="showmap" class="hidden">
+                <img id="showmap" th:src="@{/Data/image.png}" class="imageMap" onclick="hideMap()">
+            </div>
+
+            <div id="overlay" class="hidden" onclick="hideMap()"></div>
+
+            <div id="timer" class="hidden" data-extra="">
+                <div id="time"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            setTimeout(hideImportant,5000);
+            setInterval(event,20000);
+        </script>
+
+    </body>
+</html>
