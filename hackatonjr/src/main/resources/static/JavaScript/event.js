@@ -1,6 +1,6 @@
 async function end(){
     try {
-        const response = await fetch('/endGame',{
+        const response = await fetch('/api/endGame',{
             method: 'GET'
         });
 
@@ -22,7 +22,7 @@ async function end(){
 async function triggerEvent(event){
 
     try {
-        const response = await fetch('/triggerEvent',{
+        const response = await fetch('/api/triggerEvent',{
             method: 'GET'
         });
 
@@ -110,7 +110,7 @@ async function event(){
     }
 
     try {
-        const response = await fetch('/event',{
+        const response = await fetch('/api/event',{
             method: 'GET'
         });
 

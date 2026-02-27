@@ -12,7 +12,7 @@ async function equip(id){
     document.getElementById("errorEquip").hidden = true;
 
     try{
-        const response = await fetch('/equip',{
+        const response = await fetch('/api/equip',{
             method: 'POST',
             headers: {
                 'Content-type': 'text/plain;charset=UTF-8',

@@ -53,7 +53,7 @@ async function pay(){
     }
 
     try {
-        const response = await fetch('/pay',{
+        const response = await fetch('/api/pay',{
             method: 'POST',
             headers: {
                 'Content-type': 'text/plain;charset=UTF-8',

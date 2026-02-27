@@ -2,7 +2,7 @@ async function updateLocations(){
     var elements = document.getElementsByClassName("location");
 
     try{
-        const response = await fetch('/locations',{
+        const response = await fetch('/api/locations',{
             method: 'GET'
         })
 
@@ -52,7 +52,7 @@ async function move(id){
     }
 
     try{
-        const response = await fetch('/move',{
+        const response = await fetch('/api/move',{
             method: 'POST',
             headers: {
                 'Content-type': 'text/plain;charset=UTF-8',
