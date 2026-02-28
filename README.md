@@ -237,10 +237,10 @@ To contribute to the project :
 
 This project is licensed under the BSD 2-Clause License. See the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
+## Authors
 
 - HackatonJr 2025 team (Rayane M., Atahan O., Martin C.)
 
-## 📞 Support
+## Support
 
 For any questions or issues, please do not open a GitHub issue.
